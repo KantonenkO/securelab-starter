@@ -1,0 +1,11 @@
+POST /api/incidents
+{
+  "title": "   ",
+  "description": "Опис",
+  "severity": "7"
+}
+
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"title":["Заголовок обов'язковий."],"severity":["Допустимі значення: Low, Medium, High, Critical."],"occurredAtUtc":["Час події обов'язковий."]},"traceId":"00-f131c438b54f444c37e7f5dd3fbfd0c7-69b558bbc2757e69-00"}

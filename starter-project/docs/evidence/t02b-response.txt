@@ -1,0 +1,12 @@
+POST /api/incidents
+{
+  "title": "LR02 майбутня дата",
+  "description": "Опис",
+  "severity": "Low",
+  "occurredAtUtc": "2099-01-01T00:00:00Z"
+}
+
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"occurredAtUtc":["Час події не може бути більш ніж на 5 хвилин у майбутньому."]},"traceId":"00-282cc1cfaac5c7ed3b6c972850533ca6-3b55f3b565cb2fb5-00"}

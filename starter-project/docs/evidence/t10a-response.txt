@@ -1,0 +1,12 @@
+POST /api/incidents
+{
+  "title": "LR02 T-10 застаріла подія",
+  "description": "Опис застарілої події для перевірки додаткового правила.",
+  "severity": "Low",
+  "occurredAtUtc": "2020-01-01T00:00:00Z"
+}
+
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"occurredAtUtc":["Час події не може бути старшим за 365 днів."]},"traceId":"00-58030ea3a895434889600f853f25f859-9bf4d32f9f314d6d-00"}

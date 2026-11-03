@@ -1,0 +1,13 @@
+POST /api/incidents
+{
+  "title": "LR02 T-09 межа 40",
+  "description": "0123456789012345678901234567890123456789",
+  "severity": "High",
+  "occurredAtUtc": "2026-11-03T10:00:00Z"
+}
+
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Location: /api/incidents/a419f92b-24ea-49f0-90fc-52904529cf70
+
+{"id":"a419f92b-24ea-49f0-90fc-52904529cf70","title":"LR02 T-09 межа 40","severity":"High","status":"New","occurredAtUtc":"2026-11-03T10:00:00+00:00","createdAtUtc":"2026-11-03T20:31:35.2044464+00:00","updatedAtUtc":"2026-11-03T20:31:35.2044464+00:00"}

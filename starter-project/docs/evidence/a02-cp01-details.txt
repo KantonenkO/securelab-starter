@@ -1,0 +1,6 @@
+GET /api/incidents/c1f96637-24e9-4309-bf85-9865aa23c1af
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"id":"c1f96637-24e9-4309-bf85-9865aa23c1af","title":"LR02 overposting probe","description":"Перевірка ігнорування зайвих полів у request DTO.","severity":"Low","status":"New","occurredAtUtc":"2026-11-03T10:00:00+00:00","createdAtUtc":"2026-11-03T20:31:35.237311+00:00","ownerDisplayName":"Аліса Коваль","comments":[]}

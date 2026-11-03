@@ -1,0 +1,10 @@
+GET /api/incidents/99999999-9999-9999-9999-999999999999
+HTTP/1.1 404 Not Found
+Content-Type: application/problem+json
+Date: Tue, 03 Nov 2026 20:31:04 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Інцидент не знайдено","status":404,"detail":"Інцидент '99999999-9999-9999-9999-999999999999' не існує.","traceId":"00-e54728197a57c7b3ac5fe0fa2b602c14-8a426cb3b5fe8cda-00"}

@@ -1,0 +1,13 @@
+POST /api/incidents
+{
+  "title": "LR02 T-10 свіжа подія",
+  "description": "Опис свіжої події для перевірки додаткового правила.",
+  "severity": "Low",
+  "occurredAtUtc": "2026-10-01T10:00:00Z"
+}
+
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Location: /api/incidents/a5867916-d93c-4c4d-9757-1d4e57b2ec49
+
+{"id":"a5867916-d93c-4c4d-9757-1d4e57b2ec49","title":"LR02 T-10 свіжа подія","severity":"Low","status":"New","occurredAtUtc":"2026-10-01T10:00:00+00:00","createdAtUtc":"2026-11-03T20:31:35.2229963+00:00","updatedAtUtc":"2026-11-03T20:31:35.2229963+00:00"}

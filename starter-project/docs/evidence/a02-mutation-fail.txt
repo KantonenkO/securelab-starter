@@ -1,0 +1,4 @@
+  Не пройден SecureLab.Api.Tests.CreateContractTests.A02_Overposting_ExtraServerManagedFields_AreIgnored [3 s]
+Expected: "New"
+Actual:   "Closed"
+Не пройден!: не пройдено     1, пройдено     0, пропущено     0, всего     1, длительность 3 s. - SecureLab.Api.Tests.dll (net10.0)

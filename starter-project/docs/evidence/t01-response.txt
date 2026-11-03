@@ -1,0 +1,13 @@
+POST /api/incidents
+{
+  "title": "  LR02 валідний інцидент  ",
+  "description": "Навчальний опис коректного інциденту для перевірки контракту.",
+  "severity": "low",
+  "occurredAtUtc": "2026-11-03T13:00:00+03:00"
+}
+
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Location: /api/incidents/8d39a039-6c8c-4c0d-adbc-988a6ff17561
+
+{"id":"8d39a039-6c8c-4c0d-adbc-988a6ff17561","title":"LR02 валідний інцидент","severity":"Low","status":"New","occurredAtUtc":"2026-11-03T10:00:00+00:00","createdAtUtc":"2026-11-03T20:31:34.9524508+00:00","updatedAtUtc":"2026-11-03T20:31:34.9524508+00:00"}

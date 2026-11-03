@@ -1,0 +1,11 @@
+GET http://localhost:5080/api/incidents/search?q=O%27Brien
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/problem+json
+Date: Tue, 03 Nov 2026 20:28:54 GMT
+Server: Kestrel
+Cache-Control: no-cache,no-store
+Expires: -1
+Pragma: no-cache
+Transfer-Encoding: chunked
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.6.1","title":"An error occurred while processing your request.","status":500,"traceId":"00-3716234d81aeafff9c77ff398382e2ca-2c3b12943f1467ac-00"}

@@ -1,0 +1,10 @@
+$ git grep -n --untracked -e FromSqlRaw -e ExecuteSqlRaw -e "ORDER BY" -- src tests
+src/SecureLab.Api/Data/DatabaseBootstrap.cs:29:            await dbContext.Database.ExecuteSqlRawAsync(
+
+$ git grep -n --untracked -F -e '$"SELECT' -e '+ query' -- src tests
+tests/SecureLab.Api.Tests/SearchSecurityTests.cs:24:        using var response = await _client.GetAsync("/api/incidents/search" + query);
+(порожньо)
+
+$ python data-access-scan.py
+src\SecureLab.Api\Data\DatabaseBootstrap.cs:29:await dbContext.Database.ExecuteSqlRawAsync(
+tests\SecureLab.Api.Tests\SearchSecurityTests.cs:24:using var response = await _client.GetAsync("/api/incidents/search" + query);

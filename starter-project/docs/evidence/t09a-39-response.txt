@@ -1,0 +1,12 @@
+POST /api/incidents
+{
+  "title": "LR02 T-09 межа 39",
+  "description": "012345678901234567890123456789012345678",
+  "severity": "High",
+  "occurredAtUtc": "2026-11-03T10:00:00Z"
+}
+
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"description":["Для High або Critical опис має містити щонайменше 40 символів."]},"traceId":"00-11de5be2d4dc5fa56420b8507c597209-dd2965ed778c909f-00"}

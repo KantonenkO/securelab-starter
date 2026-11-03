@@ -1,0 +1,8 @@
+      Executed DbCommand (Nms) [Parameters=[@id='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (Nms) [Parameters=[@id='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (Nms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (Nms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (Nms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (Nms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Failed executing DbCommand (Nms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Failed executing DbCommand (Nms) [Parameters=[], CommandType='Text', CommandTimeout='30']

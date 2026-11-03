@@ -1,0 +1,10 @@
+GET /api/incidents/search?sortBy=price
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Date: Tue, 03 Nov 2026 20:31:04 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"sortBy":["Допустимі значення: createdAtUtc, severity, status."]},"traceId":"00-d089f80833538dfafdae4824d534e2bd-f4a8a82f1bc42919-00"}

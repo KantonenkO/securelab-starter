@@ -1,0 +1,12 @@
+POST /api/incidents
+{
+  "title": "LR02 валідний інцидент",
+  "description": "Другий запис з тим самим заголовком.",
+  "severity": "Low",
+  "occurredAtUtc": "2026-11-03T10:00:00Z"
+}
+
+HTTP/1.1 409 Conflict
+Content-Type: application/problem+json
+
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.10","title":"Інцидент уже існує","status":409,"detail":"Активний інцидент із таким заголовком уже зареєстровано.","traceId":"00-a16e1ebd1313accdf27505506493cf1a-62370b65d93bf18c-00"}
