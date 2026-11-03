@@ -1,0 +1,123 @@
+@api = http://localhost:5080
+
+### USB - перевірка встановлення
+GET {{api}}/api/incidents/search?q=USB
+
+### T-01 - коректне створення (втрачайте title при повторному запуску або робіть reset)
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "  LR02 валідний інцидент  ",
+  "description": "Навчальний опис коректного інциденту для перевірки контракту.",
+  "severity": "low",
+  "occurredAtUtc": "2026-11-03T13:00:00+03:00"
+}
+
+### T-02a - три помилки в одному запиті (порожній title, severity 7, відсутня дата)
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "   ",
+  "description": "Опис",
+  "severity": "7"
+}
+
+### T-02b - дата у далекому майбутньому
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 майбутня дата",
+  "description": "Опис",
+  "severity": "Low",
+  "occurredAtUtc": "2099-01-01T00:00:00Z"
+}
+
+### T-03 - повторний title (запустіть після T-01) -> 409
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 валідний інцидент",
+  "description": "Другий запис з тим самим заголовком.",
+  "severity": "Low",
+  "occurredAtUtc": "2026-11-03T10:00:00Z"
+}
+
+### T-09a - High, опис 39 символів -> 400 description
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 T-09 межа 39",
+  "description": "012345678901234567890123456789012345678",
+  "severity": "High",
+  "occurredAtUtc": "2026-11-03T10:00:00Z"
+}
+
+### T-09b - High, опис 40 символів -> 201
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 T-09 межа 40",
+  "description": "0123456789012345678901234567890123456789",
+  "severity": "High",
+  "occurredAtUtc": "2026-11-03T10:00:00Z"
+}
+
+### T-10a - подія старша за 365 днів -> 400 occurredAtUtc
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 T-10 застаріла подія",
+  "description": "Опис застарілої події для перевірки додаткового правила.",
+  "severity": "Low",
+  "occurredAtUtc": "2020-01-01T00:00:00Z"
+}
+
+### T-10b - подія в межах 365 днів -> 201
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 T-10 свіжа подія",
+  "description": "Опис свіжої події для перевірки додаткового правила.",
+  "severity": "Low",
+  "occurredAtUtc": "2026-10-01T10:00:00Z"
+}
+
+### A-02 / CP-01 - зайві server-managed поля мають ігноруватися
+POST {{api}}/api/incidents
+Content-Type: application/json
+
+{
+  "title": "LR02 overposting probe",
+  "description": "Перевірка ігнорування зайвих полів у request DTO.",
+  "severity": "Low",
+  "occurredAtUtc": "2026-11-03T10:00:00Z",
+  "id": "11111111-1111-1111-1111-111111111111",
+  "ownerUserId": "10000000-0000-0000-0000-000000000002",
+  "status": "Closed"
+}
+
+### T-06 - ресурс не знайдено
+GET {{api}}/api/incidents/99999999-9999-9999-9999-999999999999
+
+### S-01 / S-02 - A. звичайний пошук
+GET {{api}}/api/incidents/search?q=USB
+
+### B. значення, якого немає
+GET {{api}}/api/incidents/search?q=zz-no-match
+
+### C. контрольний read-only ввід
+GET {{api}}/api/incidents/search?q=zz-no-match%27%20OR%20TRUE%20--%20
+
+### D. легітимний апостроф
+GET {{api}}/api/incidents/search?q=O%27Brien
+
+### T-05 - невідоме sortBy -> 400
+GET {{api}}/api/incidents/search?sortBy=price
