@@ -14,8 +14,29 @@ public static class Lab02Endpoints
 
     public static void MapLab02Endpoints(this WebApplication app)
     {
-        app.MapGet("/api/incidents/search", async (string? q, string? sortBy, SecureLabDbContext db, CancellationToken ct) =>
+        app.MapGet("/api/incidents/search", async (string? q, string? sortBy, string? direction, SecureLabDbContext db, CancellationToken ct) =>
         {
+            // Валідація sortBy і direction до побудови запиту; усі помилки - одна відповідь 400.
+            var errors = new Dictionary<string, string[]>();
+            var sortKey = string.IsNullOrEmpty(sortBy) ? "createdAtUtc" : sortBy;
+            if (sortKey is not ("createdAtUtc" or "severity" or "status"))
+                errors["sortBy"] = ["Допустимі значення: createdAtUtc, severity, status."];
+
+            var sortDirection = SortDirection.Newest; // порожній direction = newest (DESC), як раніше
+            if (!string.IsNullOrEmpty(direction))
+            {
+                // Enum.TryParse приймає й числа ("0"), тому додатково вимагаємо лише літери та IsDefined.
+                if (!direction.All(char.IsLetter)
+                    || !Enum.TryParse(direction, ignoreCase: true, out sortDirection)
+                    || !Enum.IsDefined(sortDirection))
+                    errors["direction"] = ["Допустимі значення: newest, oldest."];
+                else if (sortKey is "severity" or "status")
+                    errors["direction"] = ["direction підтримується лише разом із sortBy=createdAtUtc."];
+            }
+
+            if (errors.Count > 0)
+                return Results.ValidationProblem(errors);
+
             // Значення q лише екранується як literal substring і йде в запит ПАРАМЕТРОМ (@pattern).
             var pattern = "%" + EscapeLike(q ?? "") + "%";
             var found = db.Incidents.AsNoTracking()
@@ -25,8 +46,9 @@ public static class Lab02Endpoints
             // sortBy - структура запиту: allowlist вибирає один із написаних тут виразів.
             IQueryable<Incident>? ordered = sortBy switch
             {
-                null or "" or "createdAtUtc" => found
-                    .OrderByDescending(item => item.CreatedAtUtc).ThenBy(item => item.Id),
+                null or "" or "createdAtUtc" => sortDirection == SortDirection.Oldest
+                    ? found.OrderBy(item => item.CreatedAtUtc).ThenBy(item => item.Id)
+                    : found.OrderByDescending(item => item.CreatedAtUtc).ThenBy(item => item.Id),
                 "severity" => found
                     .OrderBy(item => item.Severity == IncidentSeverity.Critical ? 0
                         : item.Severity == IncidentSeverity.High ? 1
@@ -154,6 +176,8 @@ public static class Lab02Endpoints
 
 public sealed record CreateIncidentRequest(
     string? Title, string? Description, string? Severity, DateTimeOffset? OccurredAtUtc);
+
+public enum SortDirection { Newest, Oldest }
 
 public sealed record SearchIncidentResponse(
     Guid Id, string Title, string Description, string Severity, string Status, DateTimeOffset CreatedAtUtc);

@@ -121,3 +121,18 @@ GET {{api}}/api/incidents/search?q=O%27Brien
 
 ### T-05 - невідоме sortBy -> 400
 GET {{api}}/api/incidents/search?sortBy=price
+
+### direction - createdAtUtc / порожній sortBy: newest (DESC), oldest (ASC) -> 200
+GET {{api}}/api/incidents/search?direction=newest
+
+###
+GET {{api}}/api/incidents/search?sortBy=createdAtUtc&direction=oldest
+
+### direction - невідоме значення -> 400, errors.direction
+GET {{api}}/api/incidents/search?direction=foo
+
+### direction разом із sortBy=severity або status -> 400, errors.direction
+GET {{api}}/api/incidents/search?sortBy=severity&direction=newest
+
+###
+GET {{api}}/api/incidents/search?sortBy=status&direction=oldest
