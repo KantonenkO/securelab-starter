@@ -32,7 +32,9 @@ public sealed class SearchSecurityTests(SecureLabApiFactory factory) : IClassFix
 
     private async Task<Guid> CreateAsync(string title)
     {
-        using var response = await _client.PostAsJsonAsync("/api/incidents", new
+        // ЛР 03: створення захищене, тому дані для пошуку створює автентифікований користувач.
+        using var author = await factory.LoginAsync("alice", TestPassword.Seed);
+        using var response = await author.PostAsJsonAsync("/api/incidents", new
         {
             title,
             description = "Навчальний опис для перевірки literal-пошуку.",

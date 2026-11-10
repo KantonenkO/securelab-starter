@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using SecureLab.Api.Scaffolding;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -22,6 +23,8 @@ builder.Services.AddDbContext<SecureLabDbContext>(options =>
 builder.Services.AddScoped<IncidentQueries>();
 
 builder.AddLab03Identity();
+// Некоректний JSON у register/incidents дає 400, а не 500 від UseExceptionHandler.
+builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = false);
 
 var app = builder.Build();
 

@@ -8,9 +8,18 @@ using SecureLab.Api.Data;
 namespace SecureLab.Api.Tests;
 
 // ЛР 02: T-01, T-02, T-03, T-09, T-10, A-02 для POST /api/incidents.
-public sealed class CreateContractTests(SecureLabApiFactory factory) : IClassFixture<SecureLabApiFactory>
+public sealed class CreateContractTests(SecureLabApiFactory factory) : IClassFixture<SecureLabApiFactory>, IAsyncLifetime
 {
-    private readonly HttpClient _client = factory.CreateClient();
+    // ЛР 03: POST /api/incidents захищено, тому контрактні перевірки ЛР 02 виконує автентифікований клієнт (alice).
+    private HttpClient _client = null!;
+
+    public async Task InitializeAsync() => _client = await factory.LoginAsync("alice", TestPassword.Seed);
+
+    public Task DisposeAsync()
+    {
+        _client.Dispose();
+        return Task.CompletedTask;
+    }
 
     private static object Body(string title, string? description = null, string severity = "Low",
         DateTimeOffset? occurredAt = null) => new
