@@ -1,0 +1,8 @@
+git diff --stat
+git diff
+git restore -- src/SecureLab.Api/Presentation/Contracts/IncidentResponses.cs
+git restore -- src/SecureLab.Api/Application/Incidents/IncidentQueries.cs
+git restore -- src/SecureLab.Api/Presentation/Endpoints/IncidentEndpoints.cs
+git restore -- src/SecureLab.Api/Client/index.html
+git restore -- src/SecureLab.Api/Client/app.js
+git status

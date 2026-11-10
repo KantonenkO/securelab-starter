@@ -1,0 +1,177 @@
+[
+  {
+    "path": "resources/copyable/commands.md",
+    "purpose": "Команди з методички за розділами: Git, запуск API, перевірки й незалежні мости. Виконуйте лише потрібний блок.",
+    "step": "Практичне завдання"
+  },
+  {
+    "path": "resources/copyable/code-reference.md",
+    "purpose": "Точні фрагменти C#, JavaScript, SQL і очікуваного виводу для зіставлення з поясненням у методичці.",
+    "step": "Практичне завдання"
+  },
+  {
+    "path": "resources/copyable/api-fetch.js",
+    "purpose": "Функція apiFetch зі starter з пояснювальними коментарями: читання JSON і перетворення помилки HTTP на виняток.",
+    "step": "JavaScript, який ви зустрінете у Client/app.js starter"
+  },
+  {
+    "path": "resources/copyable/verify-details.sql",
+    "purpose": "Read-only SQL для звіряння UUID, назви, опису, severity і status одного інциденту з HTTP-відповіддю.",
+    "step": "Підтвердьте дані read-only запитом до PostgreSQL"
+  },
+  {
+    "path": "resources/copyable/EfTranslationProbe/README.md",
+    "purpose": "Як запустити окрему пробу перекладу LINQ у SQL та розрізнити очікувану помилку й правильний запит.",
+    "step": "Сортуйте й фільтруйте до створення record"
+  },
+  {
+    "path": "resources/copyable/latest/README.md",
+    "purpose": "Покрокова навчальна зміна /latest крізь п’ять файлів; допомагає опанувати цикл зміни перед власним завданням.",
+    "step": "Розібраний приклад перед етапом 3: одна зміна крізь п’ять файлів"
+  },
+  {
+    "path": "resources/copyable/CategoriesDemo/Program.cs",
+    "purpose": "Повна програма: доповнення відсутніх груп нулями й два порядки enum.",
+    "step": "Повний перелік категорій: що робити з відсутніми групами"
+  },
+  {
+    "path": "resources/copyable/DeferredDemo/Program.cs",
+    "purpose": "Відкладений запит проти зафіксованого ToList().",
+    "step": "Відкладений запит і зафіксований список"
+  },
+  {
+    "path": "resources/copyable/LinqDemo/Program.cs",
+    "purpose": "Where → Select → GroupBy → ToDictionary з виводом кожного кроку.",
+    "step": "LINQ без БД: бачимо результат кожного кроку"
+  },
+  {
+    "path": "resources/copyable/ReadDemo/Program.cs",
+    "purpose": "Перевірка конструкцій C#: enum, record → JSON, ??, вираз колекції, метод розширення.",
+    "step": "Конструкції C#, які ви зустрінете у starter"
+  },
+  {
+    "path": "starter-project/src/SecureLab.Api/Client/app.js",
+    "purpose": "Клієнт starter: apiFetch, loadIncidentDetails, безпечний DOM-вивід.",
+    "step": "Зіставте response DTO з DOM"
+  },
+  {
+    "path": "resources/copyable/health-test.cs",
+    "purpose": "Нейтральний метод xUnit для /health: status, Content-Type і ready; вставляють у наявний IncidentEndpointTests, це не готовий summary-тест.",
+    "step": "Етап 3, крок 6: як прочитати й доповнити xUnit-тест"
+  },
+  {
+    "path": "starter-project/src/SecureLab.Api/Application/Incidents/IncidentQueries.cs",
+    "purpose": "Готові list/details queries; місце самостійного summary query, групування й перетворення ключа enum.",
+    "step": "Етап 3, крок 2"
+  },
+  {
+    "path": "starter-project/src/SecureLab.Api/Data/DbSeeder.cs",
+    "purpose": "Відновлює навчальний seed: чотири користувачі, три інциденти, коментарі та історія статусу.",
+    "step": "Етап 1, відновлення відомого стану"
+  },
+  {
+    "path": "starter-project/src/SecureLab.Api/Data/SecureLabDbContext.cs",
+    "purpose": "DbSet і відповідність entity таблицям; enum severity/status зберігаються як текст.",
+    "step": "Етап 2, зіставлення query і таблиці"
+  },
+  {
+    "path": "starter-project/src/SecureLab.Api/Presentation/Endpoints/IncidentEndpoints.cs",
+    "purpose": "Готові маршрути list/details, 400/404 і заготовка summary 501; місце підключення власного handler.",
+    "step": "Етап 3, крок 3"
+  },
+  {
+    "path": "one-time-examples/bridge-csharp-minimal-api/Program.cs",
+    "purpose": "Малий API мосту: /hello, /incidents і /delayed-hello; пояснює DI, LINQ та await без PostgreSQL.",
+    "step": "Міст C++ → C#"
+  },
+  {
+    "path": "resources/copyable/README.md",
+    "purpose": "Навігація по копійованих прикладах і команди запуску консольних демонстрацій; оберіть приклад зі свого кроку.",
+    "step": "Теорія та практична частина"
+  },
+  {
+    "path": "resources/copyable/local-port-override.ps1",
+    "purpose": "Запуск API з локальним портом PostgreSQL 54330 через змінну ConnectionStrings__SecureLab (PowerShell); після зупинки API змінна прибирається. Контейнер запускайте окремо з infra/.env за кроками 2–3.",
+    "step": "Етап 1, крок 2"
+  },
+  {
+    "path": "resources/copyable/local-port-override.sh",
+    "purpose": "Запуск API з локальним портом PostgreSQL 54330 через змінну ConnectionStrings__SecureLab (Bash/zsh); після зупинки API змінна прибирається. Контейнер запускайте окремо з infra/.env за кроками 2–3.",
+    "step": "Етап 1, крок 2"
+  },
+  {
+    "path": "starter-project/docs/report-template.md",
+    "purpose": "Шаблон DEL-03: рівень, фактичні результати й докази, відтворюваність та декларація ШІ; заповнюють зовнішню копію.",
+    "step": "Подання та захист"
+  },
+  {
+    "path": "resources/screenshots/web01-s01-rider-run.png",
+    "purpose": "Рис. 2. Console вікна Run у Rider: Now listening on і Hosting environment: Development. На цьому рисунку API працює на порту 5091, PostgreSQL — на 54341; на рис. 4 порт API — 5101. У вашій роботі адреса — http://localhost:5080, порт PostgreSQL — 54329; порти у своєму проєкті не змінюйте.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s03a-rider-json501.png",
+    "purpose": "Рис. 6. Тіло тієї самої відповіді 501 у Rider: відкрийте синє посилання на збережений .501.json у панелі відповіді. Title пояснює незавершену точку розширення. Ваш traceId, дата й час будуть іншими.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s03b-rider-response501.png",
+    "purpose": "Рис. 5. Rider, HTTP Client у вікні Services: baseline повернув 501 Not Implemented і application/problem+json до реалізації етапу 3. Для файлу без змін даних можна натиснути Run All Requests in File; тут усі сім запитів — GET. Відповідь 501 оберіть у дереві результатів.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s04-devtools-headers.png",
+    "purpose": "Рис. 7. Chrome DevTools → Network → Headers: GET details повернув 200 OK та Content-Type application/json. На рисунку перемикач збереження журналу називається Keep log; у DevTools також трапляється назва Preserve log. Ваш starter використовує порт 5080.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s05a-devtools-preview.png",
+    "purpose": "Рис. 8. Preview відповіді details 404: detail із переданим UUID і status 404; нижче — title «Інцидент не знайдено» та traceId. Ваш traceId буде іншим; його не порівнюють із цим зразком як з еталоном.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s05b-devtools-console.png",
+    "purpose": "Рис. 9. Console: навчальний fetch і HTTP 404 для UUID, якого немає в seed. Запит той самий, що на рис. 8; URL містить порт 5091 замість типового 5080.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s06-rider-tests.png",
+    "purpose": "Рис. 11. Rider, вікно Tests: Run All Tests і чотири baseline-тести SecureLab.Api.Tests зі статусом Success. У Rider 2026.2.2 використано дію Run All Tests from Solution через Help → Find Action (Cmd+Shift+A); в інших версіях вікно може називатися Unit Tests. У Visual Studio: Test → Test Explorer → Run All; у VS Code — Testing.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s07-rider-profile.png",
+    "purpose": "Рис. 1. Rider: Run / Debug Configurations, тип .NET Launch Settings Profile, Project SecureLab.Api і профіль http. Параметри середовища успадковано з launchSettings.json; їх не потрібно очищати.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s08-rider-debug.png",
+    "purpose": "Рис. 10. Rider Debug, вкладка Threads & Variables: точка на logger.LogInformation і id = 20000000-0000-0000-0000-000000000003. Кнопки Resume Program і Step Over — на панелі Debug. Після перевірки зніміть точку, натисніть Resume і Stop. У Visual Studio: Debug → Windows → Locals; Guid може бути у фігурних дужках.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s09-scalar.png",
+    "purpose": "Рис. 4. Scalar: відкритий клієнт GET /api/incidents/{id}. Після Test Request уведіть id у параметрах шляху (у цій версії клієнта — Variables) і натисніть Send. Видно параметр id і результат 200 OK. На рисунку порт 5101; типовий starter використовує 5080.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s12-vscode-report.png",
+    "purpose": "Рис. 12. Зовнішній lr01-report/report.md: рядок вставлення PNG і Markdown Preview поруч у VS Code. Кнопка Open Preview to the Side або Cmd+K, потім V у macOS; Ctrl+K, потім V у Windows. Для перегляду в тій самій вкладці — Ctrl+Shift+V. Картинка показує навчальні дані та порт на рисунку.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s13a-bridge-payload.png",
+    "purpose": "Рис. 13. Міст HTML → DOM → fetch: фільтр Fetch/XHR, запис greetings і Request payload з JSON name: Тест.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s13b-bridge-headers.png",
+    "purpose": "Рис. 14. Той самий greetings у Headers: POST, 200 OK, application/json. Міст працює окремо на 127.0.0.1:5078, без БД; це не порт основного SecureLab API.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  },
+  {
+    "path": "resources/screenshots/web01-s14-rider-toolset.png",
+    "purpose": "Рис. 3. Rider → Settings… → Build, Execution, Deployment → Toolset and Build: .NET CLI executable path указує на виконуваний dotnet. Показаний шлях належить macOS автора; у вашій системі він може бути іншим. Див. виділене поле.",
+    "step": "Див. підпис рисунка у відповідному кроці"
+  }
+]
