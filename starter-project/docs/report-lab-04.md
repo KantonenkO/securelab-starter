@@ -8,7 +8,7 @@
 - **Baseline:** 2-A «Трекер інцидентів»; base tag `v0.3.0` (commit `bd9adf7`); гілка `lab/4-authorization`.
 - **Головна action:** `GET /api/incidents/{id}` (details); додатково update, delete, triage, child comment, list, search, severity-summary.
 - **Політика відмов:** чужий ресурс → **404** (тотожна відповіді для неіснуючого id), ресурс видимий, але дію заборонено → **403**, недопустимий стан → **409**, зайві поля DTO → **400**, анонім → **401**. Повна таблиця — `docs/access-matrix.md`.
-- **Хеші:** vulnerable `907321ae6d27a1f634744cfc6e984f2d72533673`; fixed — див. розділ «Перевірки» (хеш тегу `v0.4.0`).
+- **Хеші:** vulnerable `907321ae6d27a1f634744cfc6e984f2d72533673`; fixed `b1be2e3eefd2283f6e948aa9fedc20cc0ed26599` (= тег `v0.4.0`).
 - **Середовище:** Windows 10 Pro, .NET SDK 10.0.302, PostgreSQL у Docker Compose, VS Code; пароль навчальних акаунтів — змінна середовища `SeedUsers__Password`.
 - ЛР 3 після тегу не виправлялась; тег `v0.3.0` не пересувався.
 
@@ -38,7 +38,7 @@ Browser client на vulnerable стані: Alice відкриває деталі
 
 ## Виправлення та retest
 
-Fixed commit — див. `v0.4.0`. Порядок у кожній mutation: завантаження tracked entity → рішення handler-а → (для відмови: audit для privileged) → перевірка поточного статусу → сервер визначає next status → `SaveChangesAsync`.
+Fixed commit `b1be2e3` (тег `v0.4.0`). Порядок у кожній mutation: завантаження tracked entity → рішення handler-а → (для відмови: audit для privileged) → перевірка поточного статусу → сервер визначає next status → `SaveChangesAsync`.
 
 | Дія | До | Після |
 |---|---|---|
