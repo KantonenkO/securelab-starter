@@ -13,14 +13,14 @@
 | Гілка / тег | `lab/3-authentication`; анотований тег `v0.3.0` (див. `git show v0.3.0`) |
 | Середовище | Windows 10 Pro 19045, .NET SDK 10.0.302, PostgreSQL у Docker Compose (порт 54329) |
 | Команди | `dotnet build SecureLab.sln -c Release`; `dotnet run --project src/SecureLab.Api -- --reset-database`; `dotnet test tests/SecureLab.Api.Tests -c Release` |
-| Результат | build без попереджень і помилок; 60 тестів із 60 пройдено; два reset поспіль (Reset-Twice.ps1), після кожного 60/60, код завершення 0 |
+| Результат | build без попереджень і помилок; 62 тести з 62 пройдено; два reset поспіль (Reset-Twice.ps1), після кожного 62/62, код завершення 0 |
 | Пароль навчальних акаунтів | змінна середовища `SeedUsers__Password`, у Git, звіт і логи не потрапляє |
 
 ## Власна реалізація і межі
 
 - **DTO boundary.** `RegisterRequest` (userName, email, displayName, password) із `[JsonUnmappedMemberHandling(Disallow)]`: зайві поля `role`, `id`, `ownerUserId` дають 400 і не створюють акаунт. `RegisterResponse` має лише `id`, `userName`, `displayName`. `MeResponse` — `id`, `userName`, `displayName`, `roles`; email, hash і stamp не повертаються. DTO створення інциденту не містить власника; зайве `ownerUserId` ігнорується (політика за замовчуванням, глобально не змінювалась).
 - **Звідки береться id.** `/api/me` і `POST /api/incidents` читають `ClaimTypes.NameIdentifier` із `HttpContext.User`, який заповнює cookie authentication handler. Header `X-Demo-UserId` ігнорується повністю. Захист — `.RequireAuthorization()` на endpoint.
-- **Cookie options.** `HttpOnly`, `SameSite=Lax`, `Secure=SameAsRequest` у Development (локальний HTTP) та `Always` у production, `Path=/`, ковзний строк 2 години. Local HTTP-trace не доводить `Secure`: це перевіряє тест через `https://localhost` (`CookieFlagsTests`).
+- **Cookie options.** `HttpOnly`, `SameSite=Lax`, `Secure=SameAsRequest` у Development (локальний HTTP) та `Always` у production, `Path=/`, ковзний строк 2 години. Local HTTP-trace не доводить `Secure`: це перевіряє тест через `https://localhost` та окремий тест у справжньому середовищі `Production` (`Secure` додається навіть до http-запиту) — `CookieFlagsTests`.
 - **Login.** Пароль перевіряє `SignInManager`/`PasswordHasher`; невідомий користувач і хибний пароль мають однаковий 401 (тип, title, status, detail). Для невідомого імені виконується фіктивна перевірка хешу, щоб вирівняти час відповіді.
 - **Duplicate-контракт.** Дублікат імені або email → `409` без уточнення, що саме зайняте; політика пароля, довжина, формат → `400` із ключами полів, без значень із запиту.
 - **Rate limit входу (добрий).** `LoginThrottle`: ключ «IP + ім'я з запиту», 5 спроб за 60 с; другий лічильник на IP — 30 спроб за 60 с. Перевищення → `429` із `Retry-After`. Ключ формується з даних запиту, а не з наявності акаунта, тож 429 не розкриває існування користувача. Відновлення після вікна перевірено тестом.
@@ -44,21 +44,22 @@
 | A-07 | добрий | unknown і wrong password → однаковий `401` (тип, title, status, detail; traceId не порівнюється), без Set-Cookie | `A07_…` |
 | S-01 | достатній | у `/api/me`, register і login-відмові немає password, passwordHash, securityStamp, token, cookie, email; логи без credentials | `S01_…`, `AuthEvents_…` |
 | Duplicate | добрий | послідовний 409 | `T02_Duplicate…` |
-| Cookie flags | добрий | HTTPS: HttpOnly, Secure, SameSite=Lax; HTTP у Development: без Secure | `CookieFlagsTests` |
+| Cookie flags | добрий | HTTPS і Production-профіль: HttpOnly, Secure, SameSite=Lax; HTTP у Development: без Secure | `CookieFlagsTests` |
 | Rate limit і події | добрий | 5 спроб → 401, 6-та → 429 (і для існуючого, і для вигаданого імені, однакова форма); інше ім'я з тієї ж адреси не заблоковане; відновлення після вікна | `LoginHardeningTests.RateLimit_…`, `AuthEvents_…` |
-| Browser flow | добрий | register → login → профіль → create → logout; після logout `/api/me` → 401; `localStorage`/`sessionStorage` порожні, JS не бачить cookie | `Client/auth-lab.*`, знімки у звіті |
+| Browser flow | добрий | register → login → профіль → create → logout; після logout `/api/me` → 401; `localStorage`/`sessionStorage` порожні, JS не бачить cookie; Console: 0 повідомлень (перехоплення `console.*` і uncaught), пароля в DOM/журналі немає |
+| Єдиний user store | чекліст | тест `OnlyApplicationUserIsUserStore_…`: `StudyUser` не в EF, FK на `identity_users`, таблиці `study_users` немає | `Client/auth-lab.*`, знімки у звіті |
 
 ### Поглиблення (відмінний рівень)
 
 1. **Втрата чинності сеансу після серверної події.** Після `ChangePasswordAsync` оновлюється `SecurityStamp`; стара cookie перестає діяти (`SecurityStampChange_InvalidatesOldCookie`: `/api/me` 200 → 401). Інтервал перевірки stamp — 1 хв (за замовчуванням 30 хв), строк cookie — 2 год ковзний.
 2. **Готовність hasher до оновлення параметрів.** Hash із 10 000 ітерацій PBKDF2 при поточних налаштуваннях дає `SuccessRehashNeeded`, поточний — `Success`, хибний пароль — `Failed` (`PasswordHasher_ReportsRehashNeeded…`). `PasswordSignInAsync` при `SuccessRehashNeeded` сам оновлює hash.
-3. **Додатковий дефект.** Для невідомого імені `SignInManager.PasswordSignInAsync` повертає відмову без хешування, тож відповідь швидша, ніж за хибного пароля, — потенційний часовий канал перебору акаунтів (висновок із коду Identity, вимірювання не проводилось). Усунено фіктивною перевіркою хешу для невідомого імені.
+3. **Додатковий дефект.** Для невідомого імені `SignInManager.PasswordSignInAsync` повертає відмову без хешування. Виміряно (60 запитів кожного виду): на scaffold медіана 7,4 мс для невідомого імені проти 190,3 мс для відомого з хибним паролем; після виправлення (фіктивна перевірка хешу) 171,5 і 171,3 мс.
 4. **Threat analysis login flow.** Активи: облікові записи, cookie сеансу, інциденти. Entry points: `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`, захищені `/api/me` і `POST /api/incidents`. Trust boundaries: браузер → сервер (усі дані клієнта недовірені, id береться лише з principal), сервер → БД (параметризовані запити EF, hash у `identity_users`). Реалістична загроза: підбір пароля до відомого імені (credential stuffing). Контрзахід: стандартний hasher із сіллю й вартістю, однаковий 401, rate limit IP+ім'я і окремо IP, події без credentials. Залишковий ризик: розподілена атака з багатьох IP та небезпека штучного блокування по ключу IP+ім'я; немає MFA, lockout акаунта і anti-forgery токена; локальна реалізація не є промисловою.
 
 ## Декларація використання ШІ
 
-ШІ (Claude, Anthropic) використано для підготовки коду, тестів і тексту звіту за методичкою; код і результати перевірено власним запуском (build, 60 тестів, два reset, ручні HTTP-запити та браузерний сценарій). Автор відповідає за перегляд і розуміння змін та має пояснити їх при захисті.
+ШІ (Claude, Anthropic) використано для підготовки коду, тестів і тексту звіту за методичкою; код і результати перевірено власним запуском (build, 62 тести, два reset, ручні HTTP-запити та браузерний сценарій). Автор відповідає за перегляд і розуміння змін та має пояснити їх при захисті.
 
 | Дата | Сервіс/модель | Завдання | Використано | Адаптація | Перевірка |
 |---|---|---|---|---|---|
-| 2026-11-10 | Claude (Sonnet) | реалізація register/login/me/logout, захисту create, тестів A/T/S, rate limit, звіту | код і текст | узгоджено з baseline 2-A та методичкою | build, 60/60 тестів, два reset, HTTP- та браузерні перевірки |
+| 2026-11-10 | Claude (Sonnet) | реалізація register/login/me/logout, захисту create, тестів A/T/S, rate limit, звіту | код і текст | узгоджено з baseline 2-A та методичкою | build, 62/62 тестів, два reset, HTTP- та браузерні перевірки |

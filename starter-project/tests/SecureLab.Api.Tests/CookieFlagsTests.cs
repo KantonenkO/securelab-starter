@@ -1,6 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SecureLab.Api.Tests;
 
@@ -46,6 +49,30 @@ public sealed class CookieFlagsTests(SecureLabApiFactory factory) : IClassFixtur
 
         var attributes = Attributes(response);
         Assert.DoesNotContain("secure", attributes);
+        Assert.Contains("httponly", attributes);
+        Assert.Contains("samesite=lax", attributes);
+    }
+
+    [Fact]
+    public async Task Login_InProductionProfile_AlwaysSetsSecure_EvenOverHttp()
+    {
+        // Реальний production-профіль: Secure=Always не залежить від схеми запиту.
+        var connection = factory.Services.GetRequiredService<IConfiguration>().GetConnectionString("SecureLab")!;
+        using var production = factory.WithWebHostBuilder(builder =>
+        {
+            builder.UseEnvironment("Production");
+            builder.UseSetting("ConnectionStrings:SecureLab", connection);
+            builder.UseSetting("Auth:LoginThrottle:PermitLimit", "1000");
+        });
+        using var client = production.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("http://localhost"), AllowAutoRedirect = false
+        });
+        using var response = await client.PostAsJsonAsync("/api/auth/login", new { userName = "alice", password = TestPassword.Seed });
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        var attributes = Attributes(response);
+        Assert.Contains("secure", attributes);
         Assert.Contains("httponly", attributes);
         Assert.Contains("samesite=lax", attributes);
     }
