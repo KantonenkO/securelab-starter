@@ -9,9 +9,19 @@ using SecureLab.Api.Scaffolding;
 namespace SecureLab.Api.Tests;
 
 // ЛР 02: S-02, T-04, T-05 та перевірка порядку сортування для GET /api/incidents/search.
-public sealed class SearchSecurityTests(SecureLabApiFactory factory) : IClassFixture<SecureLabApiFactory>
+public sealed class SearchSecurityTests(SecureLabApiFactory factory) : IClassFixture<SecureLabApiFactory>, IAsyncLifetime
 {
-    private readonly HttpClient _client = factory.CreateClient();
+    // ЛР 04: маршрути /api/incidents вимагають автентифікації; читання для аналізу виконує Analyst (Morgan),
+    // який за матрицею бачить усі інциденти. Очікування контрактів ЛР 1-2 збережено.
+    private HttpClient _client = null!;
+
+    public async Task InitializeAsync() => _client = await factory.LoginAsync("morgan", TestPassword.Seed);
+
+    public Task DisposeAsync()
+    {
+        _client.Dispose();
+        return Task.CompletedTask;
+    }
 
     private const string Id1 = "20000000-0000-0000-0000-000000000001";
     private const string Id2 = "20000000-0000-0000-0000-000000000002";

@@ -1,0 +1,37 @@
+===== ДО: vulnerable commit 907321a (http://localhost:5080) =====
+
+# A-02/A-03/A-01: details (головна action = read)
+Alice -> власний інцидент (…0001)                          -> 200 {"id": "20000000-0000-0000-0000-000000000001", "title": "Підозрілий лист із вкладенням"}
+Alice -> інцидент Bob (…0002)                              -> 200 {"title": "Невідома спроба входу", "ownerDisplayName": "Боб Мельник"}
+Анонім -> інцидент Bob                                     -> 200
+Morgan (Analyst) -> інцидент Alice (A-03R)                 -> 200 {"id": "20000000-0000-0000-0000-000000000001", "title": "Підозрілий лист із вкладенням"}
+
+# A-05: list as Alice
+Alice -> список                                            -> 200 id: ['0001', '0002', '0003', '0004', '0005']; є Bob (…0002/…0004): True
+
+# A-11: search і severity-summary (Alice)
+Alice -> severity-summary                                  -> 200 {"Low": 3, "Medium": 1, "High": 1, "Critical": 0}
+Alice -> search?q=O'Brien                                  -> 200 знайдено: ['0004']
+Morgan (Analyst) -> severity-summary                       -> 200 {"Low": 3, "Medium": 1, "High": 1, "Critical": 0}
+
+# A-04: mutation чужого ресурсу (Alice -> Bob)
+Bob читає свій інцидент (до)                               -> 200 {"title": "Невідома спроба входу", "status": "InProgress", "ownerDisplayName": "Боб Мельник"}
+Alice PUT інцидент Bob {title}                             -> 200 {"title": "змінено Alice", "status": "InProgress"}
+Bob читає свій інцидент (після)                            -> 200 {"title": "змінено Alice", "status": "InProgress", "ownerDisplayName": "Боб Мельник"}
+стан Bob змінено                                           -> ТАК
+Alice DELETE інцидент Bob (…0004)                          -> 204
+Bob читає …0004 після DELETE                               -> 404
+
+# A-08: overposting у звичайному update (Alice -> власний)
+Alice PUT власний {title,status,ownerUserId,role}          -> 200 {"title": "ЛР4 власна зміна", "status": "Resolved"}
+Alice читає власний …0003 після forged PUT                 -> 200 {"title": "ЛР4 власна зміна", "status": "Resolved", "ownerDisplayName": "Боб Мельник"}
+
+# A-06/A-07/A-09: privileged transition
+Reporter Alice triage власного {status:Closed}             -> 200 {"title": "Підозрілий лист із вкладенням", "status": "Closed"}
+Morgan (Analyst) triage …0003 (New->Triaged)               -> 200 {"status": "Triaged"}
+
+# A-12: child resource
+Alice -> коментар до інциденту Bob (comment-2)             -> 200 {"text": "Розпочато перевірку журналу автентифікації.", "authorDisplayName": "Морган Литвин"}
+Alice -> internal comment-3 до свого інциденту             -> 200 {"text": "Внутрішня примітка аналітика: потрібна додаткова перевірка джерела листа.", "isInternal": true}
+Alice: details власного містять internal-коментар          -> 200 False
+Morgan (Analyst) -> internal comment-3                     -> 200 {"text": "Внутрішня примітка аналітика: потрібна додаткова перевірка джерела листа.", "isInternal": true}

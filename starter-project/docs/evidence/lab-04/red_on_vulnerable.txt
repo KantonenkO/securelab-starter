@@ -1,0 +1,22 @@
+Не пройден AuthorizationTests.A04_Owner_Delete_Allowed_OnlyWhileNew [5 s]
+Не пройден AuthorizationTests.A10_ForeignAndUnknownIdentifier_GiveIdenticalProblem404 [175 ms]
+Не пройден AuthorizationTests.A08b_ForgedPrivilegedFields_InRegularUpdate_AreRejected_AndProtectedStateUnchanged [189 ms]
+Пройден AuthorizationTests.A02_Owner_UpdatesOwnContent_Allow_OnlyAllowedFieldsChange [138 ms]
+Не пройден AuthorizationTests.A05_List_ReturnsOnlyAllowedSet_PerRole [457 ms]
+Пройден AuthorizationTests.A02_Owner_ReadsOwnIncident_Allow [111 ms]
+Не пройден AuthorizationTests.A03R_Analyst_ReadsAliceIncident_Allow_ButCannotChangeContent [127 ms]
+Не пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "GET", path: "/api/incidents") [6 ms]
+Не пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "GET", path: "/api/incidents/severity-summary") 
+Не пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "GET", path: "/api/incidents/20000000-0000-0000-
+Пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "POST", path: "/api/incidents/20000000-0000-0000-0000
+Пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "GET", path: "/api/incident-comments/30000000-0000-00
+Пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "PUT", path: "/api/incidents/20000000-0000-0000-0000-
+Не пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "GET", path: "/api/incidents/search?q=usb") [21 
+Пройден AuthorizationTests.A01_Anonymous_ProtectedEndpoints_Return401_NotRedirect(method: "DELETE", path: "/api/incidents/20000000-0000-0000-00
+Не пройден AuthorizationTests.A04_NonOwner_UpdateAndDeleteForeign_Return404_AndDoNotChangeResource [400 ms]
+Не пройден AuthorizationTests.A07_Analyst_Triage_NewIncident_Allowed_ServerSetsNextStatus_AndSecondAttemptConflicts [474 ms]
+Не пройден AuthorizationTests.A03_NonOwner_ReadsForeignIncident_Returns404_AndNoForeignDataInBody [292 ms]
+Не пройден AuthorizationTests.A11_SearchAndSeveritySummary_AreScopedToAllowedSet [485 ms]
+Не пройден AuthorizationTests.A06_Reporter_Triage_IsDenied_StatusUnchanged [390 ms]
+Не пройден AuthorizationTests.A09_DeniedPrivilegedAction_WritesSafeAuditEvent_WithSameTraceIdAsResponse [420 ms]
+Не пройден AuthorizationTests.A12_Child_DirectAccess_IsScopedViaParent_AndInternalCommentIsHiddenFromReporter [207 ms]

@@ -1,0 +1,8 @@
+> A-06/A-09: Reporter виконує privileged transition (triage)
+Alice triage власного інциденту (…0001)  -> 403  traceId у відповіді: 00-af4dc5bf7e1d7d8396631ddab13c25ea-ae2d1701d15b8172-00
+Bob triage чужого інциденту (…0001)      -> 404  (чужий ресурс: 404, але подія audit теж записується)
+Статус після відмови                      -> Triaged (без змін)
+
+> Рядки audit з виводу API (authorization.denied):
+  authorization.denied subject=10000000-0000-0000-0000-000000000001 action=incident.triage resource=incident:20000000-0000-0000-0000-000000000001 result=denied occurredAtUtc=2026-11-11T14:12:55.6501847+00:00 traceId=00-af4dc5bf7e1d7d8396631ddab13c25ea-ae2d1701d15b8172-00
+  authorization.denied subject=10000000-0000-0000-0000-000000000002 action=incident.triage resource=incident:20000000-0000-0000-0000-000000000001 result=denied occurredAtUtc=2026-11-11T14:12:55.6653709+00:00 traceId=00-b48577ce7d5e2256b91c8ae9f58e3bf5-1bdd3d2378e70ffd-00

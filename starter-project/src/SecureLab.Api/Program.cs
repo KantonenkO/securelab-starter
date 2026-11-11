@@ -23,6 +23,9 @@ builder.Services.AddDbContext<SecureLabDbContext>(options =>
 builder.Services.AddScoped<IncidentQueries>();
 
 builder.AddLab03Identity();
+// ЛР 04: resource-based handler-и (рішення для Incident і для child IncidentComment).
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SecureLab.Api.Application.Authorization.IncidentAuthorizationHandler>();
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SecureLab.Api.Application.Authorization.IncidentCommentAuthorizationHandler>();
 // Некоректний JSON у register/incidents дає 400, а не 500 від UseExceptionHandler.
 builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = false);
 

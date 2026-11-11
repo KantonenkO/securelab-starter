@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SecureLab.Api.Application.Authorization;
 using SecureLab.Api.Data;
 using SecureLab.Api.Data.Entities;
 using SecureLab.Api.Presentation.Contracts;
@@ -7,13 +8,17 @@ namespace SecureLab.Api.Application.Incidents;
 
 public sealed class IncidentQueries(SecureLabDbContext dbContext, ILogger<IncidentQueries> logger)
 {
+    // ЛР 04: userId і роль приходять з verified principal. Умова видимості входить у запит (query scoping),
+    // тож заборонені рядки не завантажуються з БД.
     public async Task<IReadOnlyList<IncidentListItemResponse>> GetListAsync(
         IncidentStatus? status,
+        Guid? userId,
+        bool isAnalyst,
         CancellationToken cancellationToken)
     {
         logger.LogInformation("Loading incidents with status filter {Status}", status);
 
-        var query = dbContext.Incidents.AsNoTracking();
+        var query = IncidentAccessRules.VisibleTo(dbContext.Incidents.AsNoTracking(), userId, isAnalyst);
         if (status is not null)
         {
             query = query.Where(incident => incident.Status == status);
@@ -31,7 +36,12 @@ public sealed class IncidentQueries(SecureLabDbContext dbContext, ILogger<Incide
             .ToListAsync(cancellationToken);
     }
 
-    public Task<IncidentDetailsResponse?> GetDetailsAsync(Guid id, CancellationToken cancellationToken)
+    // Завантаження для рішення handler-а (без проєкції); AsNoTracking: тут лише читання.
+    public Task<Incident?> FindForDecisionAsync(Guid id, CancellationToken cancellationToken) =>
+        dbContext.Incidents.AsNoTracking().SingleOrDefaultAsync(incident => incident.Id == id, cancellationToken);
+
+    // Details-проєкція викликається ЛИШЕ після позитивного рішення. Internal-коментарі бачить тільки Analyst.
+    public Task<IncidentDetailsResponse?> GetDetailsAsync(Guid id, bool includeInternalComments, CancellationToken cancellationToken)
     {
         logger.LogInformation("Loading incident {IncidentId}", id);
 
@@ -48,7 +58,7 @@ public sealed class IncidentQueries(SecureLabDbContext dbContext, ILogger<Incide
                 incident.CreatedAtUtc,
                 incident.Owner.DisplayName,
                 incident.Comments
-                    .Where(comment => !comment.IsInternal)
+                    .Where(comment => includeInternalComments || !comment.IsInternal)
                     .OrderBy(comment => comment.CreatedAtUtc)
                     .Select(comment => new IncidentCommentResponse(
                         comment.Id,
@@ -60,10 +70,12 @@ public sealed class IncidentQueries(SecureLabDbContext dbContext, ILogger<Incide
     }
 
     public async Task<IReadOnlyList<IncidentSeveritySummaryResponse>> GetSeveritySummaryAsync(
+        Guid? userId,
+        bool isAnalyst,
         CancellationToken cancellationToken)
     {
-        var counts = await dbContext.Incidents
-            .AsNoTracking()
+        // Обмеження видимості - до групування: чужі записи не потрапляють в агрегат.
+        var counts = await IncidentAccessRules.VisibleTo(dbContext.Incidents.AsNoTracking(), userId, isAnalyst)
             .GroupBy(incident => incident.Severity)
             .Select(g => new { Severity = g.Key, Count = g.Count() })
             .ToListAsync(cancellationToken);

@@ -1,0 +1,14 @@
+> py -3 ../lr04-resources/commands/login-and-read.py --user alice --incident alice
+login_status=204
+read_status=200
+{"id": "20000000-0000-0000-0000-000000000001", "title": "Підозрілий лист із вкладенням", "ownerDisplayName": "Аліса Коваль"}
+
+> py -3 ../lr04-resources/commands/login-and-read.py --user alice --incident bob
+login_status=204
+read_status=404
+{"title": "Інцидент не знайдено", "status": 404, "traceId": "00-…"}
+
+> py -3 ../lr04-resources/commands/login-and-read.py --user morgan --incident alice
+login_status=204
+read_status=200
+{"id": "20000000-0000-0000-0000-000000000001", "title": "Підозрілий лист із вкладенням", "ownerDisplayName": "Аліса Коваль"}

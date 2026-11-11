@@ -1,0 +1,5 @@
+> A-10: той самий клієнт Alice, лише id відрізняється
+GET /api/incidents/<чужий (Bob …0002)> -> 404
+   {"type": "https://tools.ietf.org/html/rfc9110#section-15.5.5", "title": "Інцидент не знайдено", "status": 404, "detail": "Ресурс не знайдено або недоступний.", "traceId": "00-…"}
+GET /api/incidents/<неіснуючий> -> 404
+   {"type": "https://tools.ietf.org/html/rfc9110#section-15.5.5", "title": "Інцидент не знайдено", "status": 404, "detail": "Ресурс не знайдено або недоступний.", "traceId": "00-…"}
