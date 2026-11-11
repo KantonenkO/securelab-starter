@@ -18,7 +18,7 @@
 
 ## Вразливий стан і PoC
 
-Vulnerable commit `907321a`: details, update, delete, triage і child-comment шукають ресурс лише за id, без порівняння з principal. Сценарій — `tests/http/lab-04-access.http` і `docs/evidence/lab-04/poc_before.txt` (Python helper з cookie лише в пам'яті).
+Vulnerable commit `907321a`: details, update, delete, triage і child-comment шукають ресурс лише за id, без порівняння з principal. Сценарій — `tests/http/lab-04-access.http` (розширено запитами update/delete/triage/child/list/search/summary у commit після тегу; тег `v0.4.0` лишається на fixed commit) і `docs/evidence/lab-04/poc_before.txt` (Python helper з cookie лише в пам'яті).
 
 | Дія | Очікування за матрицею | Фактично до виправлення |
 |---|---|---|
@@ -31,6 +31,8 @@ Vulnerable commit `907321a`: details, update, delete, triage і child-comment ш
 | Reporter Alice triage власного `{status:Closed}` | 403 | **200**, статус Closed |
 | Alice → коментар до інциденту Bob / internal | 404 | **200** / **200** (`isInternal: true`) |
 | Alice list / severity-summary / search O'Brien | лише власні | усі 5 / High 1 Medium 1 Low 3 / знайдено …0004 |
+
+Крок 10 методички: у vulnerable стані підтверджено підстановку `status`, `ownerUserId`, `role` (role у body ігнорується DTO, але `status` і `ownerUserId` приймаються). Контрольний boolean на кшталт `isTransitionAllowed` у DTO відсутній, тож його підстановка нічого не змінює — окремо не відтворювалась.
 
 **Першопричина:** запит `Where(i => i.Id == id)` (і так само для child) без умови за власником/роллю і без виклику централізованого рішення; `RequireAuthorization()` перевіряє лише автентифікацію; update DTO містить поля, якими має керувати сервер; transition бере статус із body.
 

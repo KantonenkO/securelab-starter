@@ -1,20 +1,74 @@
 @host = http://localhost:5080
 @aliceId = 20000000-0000-0000-0000-000000000001
 @bobId = 20000000-0000-0000-0000-000000000002
+@aliceSafeId = 20000000-0000-0000-0000-000000000003
+@bobSearchId = 20000000-0000-0000-0000-000000000004
+@commentToBob = 30000000-0000-0000-0000-000000000002
+@internalComment = 30000000-0000-0000-0000-000000000003
+@bobUserId = 10000000-0000-0000-0000-000000000002
 
-### Alice login; REST Client reads process environment
+# Сценарій PoC і retest ЛР 04 (VS Code + REST Client). Пароль береться зі змінної середовища SeedUsers__Password
+# (VS Code запускайте з термінала: code .). Cookie REST Client зберігає сам; значення cookie тут не друкуються.
+# Перед повтором виконайте reset (vulnerable PoC змінює й видаляє дані): dotnet run --project src/SecureLab.Api -- --reset-database
+
+############################ Alice (Reporter) ############################
+
+### Alice login
 POST {{host}}/api/auth/login
 Content-Type: application/json
 
 { "userName": "alice", "password": "{{$processEnv SeedUsers__Password}}" }
 
-### Own details
+### A-02: own details (очікується 200)
 GET {{host}}/api/incidents/{{aliceId}}
 Accept: application/json
 
-### Foreign details with the same Alice cookie
+### A-03: foreign details with the same Alice cookie (vulnerable: 200 і дані Bob; fixed: 404)
 GET {{host}}/api/incidents/{{bobId}}
 Accept: application/json
+
+### A-05: list (vulnerable: усі 5; fixed: лише власні)
+GET {{host}}/api/incidents
+Accept: application/json
+
+### A-11: severity-summary (vulnerable: High 1 Medium 1 Low 3; fixed: Medium 1 Low 2)
+GET {{host}}/api/incidents/severity-summary
+Accept: application/json
+
+### A-11: search (vulnerable: знаходить інцидент Bob …0004; fixed: [])
+GET {{host}}/api/incidents/search?q=O%27Brien
+Accept: application/json
+
+### A-04: update чужого ресурсу (vulnerable: 200 і зміна; fixed: 404)
+PUT {{host}}/api/incidents/{{bobId}}
+Content-Type: application/json
+
+{ "title": "змінено Alice" }
+
+### A-04: delete чужого ресурсу (vulnerable: 204; fixed: 404)
+DELETE {{host}}/api/incidents/{{bobSearchId}}
+
+### A-08: forged privileged fields у звичайному update власного (vulnerable: 200; fixed: 400)
+PUT {{host}}/api/incidents/{{aliceSafeId}}
+Content-Type: application/json
+
+{ "title": "власна зміна", "status": "Resolved", "ownerUserId": "{{bobUserId}}", "role": "Administrator" }
+
+### A-06: Reporter виконує privileged transition (vulnerable: 200; fixed: 403 + audit)
+POST {{host}}/api/incidents/{{aliceId}}/triage
+Content-Type: application/json
+
+{}
+
+### A-12: child resource: коментар до інциденту Bob (vulnerable: 200; fixed: 404)
+GET {{host}}/api/incident-comments/{{commentToBob}}
+Accept: application/json
+
+### A-12: internal comment до власного інциденту (vulnerable: 200; fixed: 404 для Reporter)
+GET {{host}}/api/incident-comments/{{internalComment}}
+Accept: application/json
+
+############################ Bob: стан до/після ############################
 
 ### Bob login changes current identity
 POST {{host}}/api/auth/login
@@ -22,9 +76,11 @@ Content-Type: application/json
 
 { "userName": "bob", "password": "{{$processEnv SeedUsers__Password}}" }
 
-### Own details
+### Own details (state assertion: прочитати до і після спроб Alice)
 GET {{host}}/api/incidents/{{bobId}}
 Accept: application/json
+
+############################ Morgan (Analyst) ############################
 
 ### Morgan login; Analyst read
 POST {{host}}/api/auth/login
@@ -32,6 +88,22 @@ Content-Type: application/json
 
 { "userName": "morgan", "password": "{{$processEnv SeedUsers__Password}}" }
 
-### Permitted Analyst read
+### A-03R: permitted Analyst read (очікується 200)
 GET {{host}}/api/incidents/{{aliceId}}
+Accept: application/json
+
+### A-07: permitted transition New -> Triaged для інциденту у статусі New (очікується 200; повтор -> 409)
+POST {{host}}/api/incidents/{{aliceSafeId}}/triage
+Content-Type: application/json
+
+{ "reason": "Первинна класифікація" }
+
+### Analyst читає internal comment (очікується 200)
+GET {{host}}/api/incident-comments/{{internalComment}}
+Accept: application/json
+
+############################ Анонім ############################
+
+### A-01: anonymous (REST Client без cookie: використайте окреме вікно/скиньте cookie) -> 401
+GET {{host}}/api/incidents/{{bobId}}
 Accept: application/json
