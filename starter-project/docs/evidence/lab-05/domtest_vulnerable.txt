@@ -1,0 +1,2 @@
+﻿# DOM-тест tests/browser/lab05-dom.js, стан: vulnerable, браузер: Edg/157.0.0.0
+РЕЗУЛЬТАТ: FAIL — EXCEPTION: Error: Description: текст у DOM відрізняється від збереженого

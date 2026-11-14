@@ -1,0 +1,8 @@
+﻿# ВІКНО B (morgan), стан: before
+login: Профіль: 200
+marker до дії (очікується null): null
+статус: GET: 200; Guid=3b588aae-3ce6-4aec-a734-81e3c5ce4d19
+marker після «Прочитати» (Morgan до fix: 'executed'; Bob: null): executed
+#description childElementCount: 1; textContent: 
+Network:
+   GET      http://localhost:5080/api/incidents/3b588aae-3ce6-4aec-a734-81e3c5ce4d19  status=200  [Cookie надіслано]

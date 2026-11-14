@@ -1,0 +1,18 @@
+﻿# CORS-дослід, фаза: creds
+login Alice на 5080: Профіль: 200
+
+## Сторінка http://localhost:4173/
+кнопка GET (credentials: include): 200: [{"id":"751b1971-81a3-4d6d-aa53-ce0753d44253","title":"ЛР5 normal long-3900 (after)","severity":"Low","status":"New","occurredAtUtc":"2026-11-14T18:49:42.9
+  Network:
+    GET      http://localhost:5080/api/incidents  status=200  Origin=http://localhost:4173  [Cookie надіслано]  ACAO=http://localhost:4173  ACAC=true
+  Console:
+    [error] Failed to load resource: the server responded with a status of 404 (File not found)
+
+## Сторінка http://localhost:4174/
+кнопка GET (credentials: include): Браузер не надав response JavaScript; звірте Network і серверний стан.
+  Network:
+    GET      http://localhost:5080/api/incidents  status=200  Origin=http://localhost:4174  [Cookie надіслано]  FAILED: net::ERR_FAILED corsError=MissingAllowOriginHeader blocked=
+  Console:
+    [error] Failed to load resource: the server responded with a status of 404 (File not found)
+    [error] Access to fetch at 'http://localhost:5080/api/incidents' from origin 'http://localhost:4174' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+    [error] Failed to load resource: net::ERR_FAILED

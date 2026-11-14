@@ -1,0 +1,33 @@
+﻿# CORS-дослід, фаза: before
+
+## Сторінка http://localhost:4173/
+простий запит GET /health: TypeError: Failed to fetch
+  Network:
+    GET      http://localhost:5080/health  status=200  Origin=http://localhost:4173  FAILED: net::ERR_FAILED corsError=MissingAllowOriginHeader blocked=
+  Console:
+    [error] Failed to load resource: the server responded with a status of 404 (File not found)
+    [error] Access to fetch at 'http://localhost:5080/health' from origin 'http://localhost:4173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+    [error] Failed to load resource: net::ERR_FAILED
+запит із заголовком X-Lab-Cors-Probe: TypeError: Failed to fetch
+  Network (preflight і actual):
+    GET      http://localhost:5080/health?probe=2  status=  FAILED: net::ERR_FAILED corsError=PreflightMissingAllowOriginHeader blocked=
+    OPTIONS  http://localhost:5080/health?probe=2  status=405  Origin=http://localhost:4173
+  Console:
+    [error] Access to fetch at 'http://localhost:5080/health?probe=2' from origin 'http://localhost:4173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+    [error] Failed to load resource: net::ERR_FAILED
+
+## Сторінка http://localhost:4174/
+простий запит GET /health: TypeError: Failed to fetch
+  Network:
+    GET      http://localhost:5080/health  status=200  Origin=http://localhost:4174  FAILED: net::ERR_FAILED corsError=MissingAllowOriginHeader blocked=
+  Console:
+    [error] Failed to load resource: the server responded with a status of 404 (File not found)
+    [error] Access to fetch at 'http://localhost:5080/health' from origin 'http://localhost:4174' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+    [error] Failed to load resource: net::ERR_FAILED
+запит із заголовком X-Lab-Cors-Probe: TypeError: Failed to fetch
+  Network (preflight і actual):
+    GET      http://localhost:5080/health?probe=2  status=  FAILED: net::ERR_FAILED corsError=PreflightMissingAllowOriginHeader blocked=
+    OPTIONS  http://localhost:5080/health?probe=2  status=405  Origin=http://localhost:4174
+  Console:
+    [error] Access to fetch at 'http://localhost:5080/health?probe=2' from origin 'http://localhost:4174' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+    [error] Failed to load resource: net::ERR_FAILED

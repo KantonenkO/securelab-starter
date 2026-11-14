@@ -1,0 +1,4 @@
+﻿# Application -> Storage -> Cookies -> http://localhost:5080 (без Value)
+name=.AspNetCore.Identity.Application; domain=localhost; path=/; httpOnly=True; sameSite=Lax; secure=False; session=True
+document.cookie (доступне JavaScript): довжина 0
+localStorage: 0 записів; sessionStorage: 0 записів

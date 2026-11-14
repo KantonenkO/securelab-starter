@@ -1,0 +1,34 @@
+﻿# ВІКНО A (Alice), стан: after
+login: Профіль: 200
+marker до будь-яких дій (очікується null): null
+[seed Alice] статус: GET: 200; title: Підозрілий лист із вкладенням
+[seed Alice] marker після відображення коментарів: null
+[seed Alice] #comments elementCount(діти p): 2; img у #comments: 0
+[seed Alice] #comments innerHTML: <p>Заголовки листа передано аналітику.</p><p>&lt;img src=x onerror="document.querySelector('#lab05-marker-target').setAttribute('data-lab05-marker','executed')"&gt;</p>
+Network (seed):
+   GET      http://localhost:5080/api/incidents/20000000-0000-0000-0000-000000000001  status=200  [Cookie надіслано]
+marker після перезавантаження (null): null
+[Description marker] статус: GET: 200; Guid=2584dcbf-f50f-4249-a587-33a6864ce380
+[Description marker] marker (до: 'executed', після fix: null): null
+[Description marker] #description childElementCount: 0; перший дочірній елемент: 
+[Description marker] #description innerHTML: &lt;img src=x onerror="document.querySelector('#lab05-marker-target').setAttribute('data-lab05-marker','executed')"&gt;
+[Description marker] #description textContent: <img src=x onerror="document.querySelector('#lab05-marker-target').setAttribute('data-lab05-marker','executed')">
+Network (Description marker):
+   POST     http://localhost:5080/api/incidents  status=201  Origin=http://localhost:5080  [Cookie надіслано]
+   GET      http://localhost:5080/api/incidents/2584dcbf-f50f-4249-a587-33a6864ce380  status=200  [Cookie надіслано]
+POST payload (description == marker): True
+API JSON description == marker: True
+API JSON description sha256-довжина: 113
+[той самий запис з vulnerable-стану 3b588aae-3ce6-4aec-a734-81e3c5ce4d19] marker: null; елементів у #description: 0; textContent == збережене значення: True
+[той самий запис] значення в API після fix == значення до fix: True
+# DOM-тест description-dom.js:
+DOM-тест результат: PASS
+DOM-тест console: [console.log] PASS: persisted description rendered as plain text
+# Нормальні значення Description:
+[apostrophe-quotes] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: Користувач O'Brien написав "терміново"
+[angle-brackets] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: 5 < 7 і 9 > 3
+[unicode] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: Київ — Ω
+[html-like-b] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: <b>жирний</b> текст
+[long-3900] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: довжина 3900
+[seed …0003 з <script>] DOM.textContent: Текст <script> має відображатися як текст, а не виконуватися як HTML.; елементів: 0
+[повторний render] коментарів після 1-го і 3-го виклику load(): 2 -> 2 (однаково = без дублювання)

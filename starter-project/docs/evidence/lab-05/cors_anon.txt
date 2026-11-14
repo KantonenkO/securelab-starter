@@ -1,0 +1,18 @@
+﻿# CORS-дослід, фаза: anon
+
+## Сторінка http://localhost:4173/
+кнопка GET (credentials: include): 401: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.2","title":"Unauthorized","status":401,"traceId":"00-9dee3375bb58d381e34631b3d1ec0c6e-7ce229b3078
+  Network:
+    GET      http://localhost:5080/api/incidents  status=401  Origin=http://localhost:4173  ACAO=http://localhost:4173  ACAC=true
+  Console:
+    [error] Failed to load resource: the server responded with a status of 404 (File not found)
+    [error] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+
+## Сторінка http://localhost:4174/
+кнопка GET (credentials: include): Браузер не надав response JavaScript; звірте Network і серверний стан.
+  Network:
+    GET      http://localhost:5080/api/incidents  status=401  Origin=http://localhost:4174  FAILED: net::ERR_FAILED corsError=MissingAllowOriginHeader blocked=
+  Console:
+    [error] Failed to load resource: the server responded with a status of 404 (File not found)
+    [error] Access to fetch at 'http://localhost:5080/api/incidents' from origin 'http://localhost:4174' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+    [error] Failed to load resource: net::ERR_FAILED

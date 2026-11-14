@@ -1,0 +1,5 @@
+﻿# CSP enforcement + VULNERABLE browser-lab.js (тимчасово), той самий запис
+marker після render: null (null: виконання заблоковано CSP)
+елементів у #description: 1; перший: IMG (sink лишився небезпечним: <img> створено)
+Console: [error] Executing inline event handler violates the following Content Security Policy directive 'script-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-...'), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present. The action has been blocked.
+DOM-тест description-dom.js: FAIL — EXCEPTION: Error: Text changed

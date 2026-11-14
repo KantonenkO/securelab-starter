@@ -1,0 +1,5 @@
+> curl.exe -sS -D - -o NUL http://localhost:5080/   (enforcement)
+HTTP/1.1 200 OK
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'

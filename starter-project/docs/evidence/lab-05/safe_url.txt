@@ -1,0 +1,8 @@
+﻿# safe-url.js у Console http://localhost:5080/browser-lab.html (Edge, CSP enforcement)
+safeHttpUrl("https://example.com/a")             -> https://example.com/a
+safeHttpUrl("/incidents/1")                      -> http://localhost:5080/incidents/1
+safeHttpUrl("javascript:alert(1)")               -> null
+safeHttpUrl(" JaVaScRiPt:alert(1)")              -> null
+safeHttpUrl("http://[bad")                       -> null
+a.getAttribute("href") створеного посилання      -> http://localhost:5080/incidents/1
+a.getAttribute("onclick")                        -> null

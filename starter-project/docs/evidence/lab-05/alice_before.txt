@@ -1,0 +1,34 @@
+﻿# ВІКНО A (Alice), стан: before
+login: Профіль: 200
+marker до будь-яких дій (очікується null): null
+[seed Alice] статус: GET: 200; title: Підозрілий лист із вкладенням
+[seed Alice] marker після відображення коментарів: executed
+[seed Alice] #comments elementCount(діти p): 2; img у #comments: 1
+[seed Alice] #comments innerHTML: <p>Заголовки листа передано аналітику.</p><p><img src="x" onerror="document.querySelector('#lab05-marker-target').setAttribute('data-lab05-marker','executed')"></p>
+Network (seed):
+   GET      http://localhost:5080/api/incidents/20000000-0000-0000-0000-000000000001  status=200  [Cookie надіслано]
+   GET      http://localhost:5080/x  status=200  [Cookie надіслано]
+marker після перезавантаження (null): null
+[Description marker] статус: GET: 200; Guid=3b588aae-3ce6-4aec-a734-81e3c5ce4d19
+[Description marker] marker (до: 'executed', після fix: null): executed
+[Description marker] #description childElementCount: 1; перший дочірній елемент: IMG
+[Description marker] #description innerHTML: <img src="x" onerror="document.querySelector('#lab05-marker-target').setAttribute('data-lab05-marker','executed')">
+[Description marker] #description textContent: 
+Network (Description marker):
+   POST     http://localhost:5080/api/incidents  status=201  Origin=http://localhost:5080  [Cookie надіслано]
+   GET      http://localhost:5080/api/incidents/3b588aae-3ce6-4aec-a734-81e3c5ce4d19  status=200  [Cookie надіслано]
+   GET      http://localhost:5080/x  status=200  [Cookie надіслано]
+POST payload (description == marker): True
+API JSON description == marker: True
+API JSON description sha256-довжина: 113
+# DOM-тест description-dom.js:
+DOM-тест результат: FAIL — EXCEPTION: Error: Text changed
+DOM-тест console: 
+# Нормальні значення Description:
+[apostrophe-quotes] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: Користувач O'Brien написав "терміново"
+[angle-brackets] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: 5 < 7 і 9 > 3
+[unicode] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: Київ — Ω
+[html-like-b] API==вхід: True; DOM.textContent==вхід: False; елементів у #description: 1; значення: <b>жирний</b> текст
+[long-3900] API==вхід: True; DOM.textContent==вхід: True; елементів у #description: 0; значення: довжина 3900
+[seed …0003 з <script>] DOM.textContent: Текст  має відображатися як текст, а не виконуватися як HTML.; елементів: 1
+[повторний render] коментарів після 1-го і 3-го виклику load(): 2 -> 2 (однаково = без дублювання)

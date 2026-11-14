@@ -1,0 +1,8 @@
+﻿# ВІКНО B (bob), стан: after
+login: Профіль: 200
+marker до дії (очікується null): null
+статус: GET: 404; Guid=3b588aae-3ce6-4aec-a734-81e3c5ce4d19
+marker після «Прочитати» (Morgan до fix: 'executed'; Bob: null): null
+#description childElementCount: 0; textContent: 
+Network:
+   GET      http://localhost:5080/api/incidents/3b588aae-3ce6-4aec-a734-81e3c5ce4d19  status=404  [Cookie надіслано]

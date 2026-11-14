@@ -1,0 +1,21 @@
+﻿# CSP, режим: enforce
+## Сторінка /auth-lab.html
+  документ http://localhost:5080/auth-lab.html -> 200; Referrer-Policy: no-referrer; X-Content-Type-Options: nosniff
+     Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  login і профіль: Профіль: 200; стан сеансу: Сеанс активний
+  Console (CSP): 
+## Сторінка / (список і деталі)
+  документ http://localhost:5080/ -> 200; Referrer-Policy: no-referrer; X-Content-Type-Options: nosniff
+     Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  список: Знайдено: 16
+  Console (CSP): 
+## Сторінка /browser-lab.html
+  документ http://localhost:5080/browser-lab.html -> 200; Referrer-Policy: no-referrer; X-Content-Type-Options: nosniff
+     Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  читання запису з marker: GET: 200; DOM: елементів у #description = 0
+  DOM-тест під CSP: PASS
+  Console (CSP): 
+## Кероване порушення: new Image().src = http://localhost:4173/x.png
+  Console: [error] Loading the image 'http://localhost:4173/x.png' violates the following Content Security Policy directive: "img-src 'self'". The action has been blocked.
+  Network: запит http://localhost:4173/x.png
+  Network: loadingFailed blockedReason=csp errorText=
