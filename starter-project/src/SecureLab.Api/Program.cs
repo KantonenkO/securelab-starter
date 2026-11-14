@@ -29,6 +29,22 @@ builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationH
 // Некоректний JSON у register/incidents дає 400, а не 500 від UseExceptionHandler.
 builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = false);
 
+// ЛР 5: навчальна CORS policy лише для Development. Дозволено єдиний exact origin probe (без / наприкінці).
+// 4174 лишається негативним контролем. Production цю policy не реєструє і не застосовує.
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("Lab05BrowserProbe", policy =>
+        {
+            policy.WithOrigins("http://localhost:4173")
+                  .WithMethods("GET")
+                  .WithHeaders("X-Lab-Cors-Probe")
+                  .AllowCredentials();
+        });
+    });
+}
+
 var app = builder.Build();
 
 var resetRequested = args.Contains("--reset-database", StringComparer.Ordinal);
@@ -42,10 +58,22 @@ if (resetRequested)
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
+// ЛР 5: CSP складено за фактичними ресурсами клієнта (власні scripts/styles/images з того самого origin, API на
+// тому самому origin). Без unsafe-inline і зовнішніх джерел; frame-ancestors не має fallback до default-src.
+const string csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; "
+    + "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+
 app.Use(async (context, next) =>
 {
     context.Response.Headers.XContentTypeOptions = "nosniff";
     context.Response.Headers.Append("Referrer-Policy", "no-referrer");
+    // /scalar - Development-довідник на сторонньому UI package з власними inline/зовнішніми ресурсами: окремий виняток,
+    // лише в Development; CSP основного клієнта через нього не послаблюється.
+    var isDevelopmentApiReference = app.Environment.IsDevelopment() && context.Request.Path.StartsWithSegments("/scalar");
+    if (!isDevelopmentApiReference)
+    {
+        context.Response.Headers["Content-Security-Policy"] = csp;
+    }
     await next(context);
 });
 
@@ -55,6 +83,13 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+// UseRouting явно і UseCors одразу після нього: CORS працює до authentication/authorization, тож дозволені
+// headers є і в 401/403 відповідях.
+app.UseRouting();
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("Lab05BrowserProbe");
+}
 app.UseAuthentication();
 app.UseAuthorization();
 

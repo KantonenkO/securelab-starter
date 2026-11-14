@@ -21,7 +21,7 @@ function showState(state) {
 
 function clearProfile() { profileBox.replaceChildren(); }
 
-// Лише дозволені поля DTO, виключно через textContent (без innerHTML).
+// Лише дозволені поля DTO, виключно через textContent та створені DOM-вузли.
 function renderProfile(me) {
   clearProfile();
   const rows = [["Id", me.id], ["Ім’я", me.userName], ["Відображуване", me.displayName], ["Ролі", (me.roles ?? []).join(", ")]];
