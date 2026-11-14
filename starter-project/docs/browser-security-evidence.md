@@ -7,7 +7,7 @@
 - ОС: Windows 10 Pro 19045; браузер: Microsoft Edge 157.0 (Chromium; керувався через DevTools-протокол, знімки — зі справжньої сторінки); .NET SDK 10.0.302; PostgreSQL у Docker Compose.
 - API/клієнт: `http://localhost:5080`; probes: `http://localhost:4173` (дозволений) і `http://localhost:4174` (контроль).
 - Scaffold: release `lab-05-start-v1`; `base_commit` = `entry_parent` = `b1be2e3eefd2283f6e948aa9fedc20cc0ed26599` (v0.4.0).
-- Hashes: scaffold-commit `b5638e5`; **vulnerable commit `74d588e`** (scaffold + seed marker-коментар); fixed commit і тег `v0.5.0` — у `docs/report-lab-05.md` (розділ «Git»). Окремі проміжні commit: `d42eb38` (safe DOM sink).
+- Hashes: scaffold-commit `b5638e5`; **vulnerable commit `74d588e`** (scaffold + seed marker-коментар); **fixed commit `8d1ad57092294a63710885a0e7fcdd14a04652bb` = тег `v0.5.0`**. Окремі проміжні commit: `d42eb38` (safe DOM sink).
 - Передавання: перевірений стан → локальна `main` (fast-forward) і `lab05.bundle`; приватного remote для ЛР 5 немає.
 - Механізм сеансу (Application → Storage → Cookies → `http://localhost:5080`, без Value): `.AspNetCore.Identity.Application`; Domain `localhost` (host-only); Path `/`; HttpOnly `true`; SameSite `Lax`; Secure `false` (локальний HTTP, у production — Always); session cookie; `document.cookie` для JavaScript порожній; localStorage і sessionStorage — 0 записів (`out/cookie_meta.txt`).
 
