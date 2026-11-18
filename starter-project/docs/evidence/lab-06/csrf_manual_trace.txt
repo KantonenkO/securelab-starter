@@ -1,0 +1,35 @@
+# REG-CSRF-01 (manual trace): Development, alice, local seed; token/cookie values are not printed
+> POST /api/auth/login (alice)
+status=204
+> GET /api/antiforgery/token (same cookie session)
+HTTP/1.1 200 OK
+Cache-Control: no-store
+set-cookie names: SecureLab.Antiforgery 
+token length=198 (value not printed)
+> POST /api/incidents (with token) -> create the test resource
+status=201
+incident id=b2bf7157-dc22-4da5-8a42-7b0320c2d3e6
+> GET state BEFORE
+title= LR6 CSRF demo original
+> PUT without X-CSRF-TOKEN (browser with automatic cookie only)
+status=400
+problem title= Antiforgery token is missing or invalid. | status= 400 | has traceId= True
+> PUT with invalid token
+status=400
+> GET state AFTER rejected requests (must be unchanged)
+title= LR6 CSRF demo original
+> DELETE without token
+status=400
+> POST /api/auth/logout without token
+status=400
+> GET /api/me (session must still be active)
+status=200
+> PUT with valid token pair (cookie + header)
+status=200
+> GET state AFTER legit change
+title= LR6 CSRF legit change
+> DELETE with valid token (cleanup)
+status=204
+> POST logout with token; then /api/me
+status=204
+GET /api/me after logout (cookie jar updated) status=401

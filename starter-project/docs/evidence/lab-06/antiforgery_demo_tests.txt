@@ -1,0 +1,10 @@
+
+Project `AntiforgeryDemo\AntiforgeryDemo.csproj` added to the solution.
+Project `AntiforgeryDemo.Tests\AntiforgeryDemo.Tests.csproj` added to the solution.
+Project `RateLimitDemo\RateLimitDemo.csproj` added to the solution.
+  AntiforgeryDemo -> <work>/AntiforgeryDemo\bin\Release\net10.0\AntiforgeryDemo.dll
+  AntiforgeryDemo.Tests -> <work>/AntiforgeryDemo.Tests\bin\Release\net10.0\AntiforgeryDemo.Tests.dll
+Test run for <work>/AntiforgeryDemo.Tests\bin\Release\net10.0\AntiforgeryDemo.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 1 s - AntiforgeryDemo.Tests.dll (net10.0)

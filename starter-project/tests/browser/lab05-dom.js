@@ -13,7 +13,8 @@ await (async () => {
   check(target() === null, "Перезавантажте сторінку: атрибут marker уже встановлено");
 
   const create = async (title, description) => {
-    const response = await fetch("/api/incidents", { method: "POST", headers: { "Content-Type": "application/json" },
+    // ЛР 6: змінювальний запит іде через єдиний helper antiforgery (csrf.js підключено на browser-lab.html).
+    const response = await SecureLabCsrf.fetch("/api/incidents", { method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: `${title} ${suffix}-${++counter}`, description, severity: "Low", occurredAtUtc: new Date().toISOString() }) });
     check(response.status === 201, `POST ${title}: HTTP ${response.status}`);
     return (await response.json()).id;

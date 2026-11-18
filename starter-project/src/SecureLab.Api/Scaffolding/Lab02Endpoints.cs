@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SecureLab.Api.Application.Authorization;
 using SecureLab.Api.Data;
 using SecureLab.Api.Data.Entities;
+using SecureLab.Api.Security;
 
 namespace SecureLab.Api.Scaffolding;
 
@@ -58,7 +59,7 @@ public static class Lab02Endpoints
                     item.Severity.ToString(), item.Status.ToString(), item.CreatedAtUtc))
                 .ToListAsync(ct);
             return Results.Ok(rows);
-        }).RequireAuthorization();
+        }).RequireAuthorization().RequireRateLimiting(AbuseLimits.SearchPolicy);
         app.MapPost("/api/incidents", async (CreateIncidentRequest request, HttpContext httpContext, SecureLabDbContext db, CancellationToken ct) =>
         {
             // ЛР 03: власника встановлює сервер із перевіреного principal (cookie), а не з тіла чи header.
@@ -152,7 +153,7 @@ public static class Lab02Endpoints
                 incident.Id, incident.Title, incident.Severity.ToString(), incident.Status.ToString(),
                 incident.OccurredAtUtc, incident.CreatedAtUtc, incident.UpdatedAtUtc);
             return Results.Created($"/api/incidents/{incident.Id}", response);
-        }).RequireAuthorization();
+        }).RequireAuthorization().RequireAntiforgery();
     }
 
     // Спочатку екрануємо сам escape-символ, потім _ і %; зовнішні % додає виклик.

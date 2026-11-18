@@ -1,0 +1,7 @@
+# Server-side log for the same request (TraceId 2706193d193542332b3a6989e21419ce; stack trace omitted)
+      1 fail: Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware[1]
+      1 fail: Microsoft.EntityFrameworkCore.Database.Connection[20004]
+      1 fail: Microsoft.EntityFrameworkCore.Query[10100]
+scope of the ExceptionHandlerMiddleware record:
+=> SpanId:29d0a2c8d0899549, TraceId:2706193d193542332b3a6989e21419ce, ParentId:0000000000000000 => ConnectionId:0HNQ5A26I6MTU => RequestPath:/api/auth
+ExceptionHandlerMiddleware record with same TraceId: 1

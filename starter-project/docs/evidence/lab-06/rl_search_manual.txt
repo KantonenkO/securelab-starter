@@ -1,0 +1,12 @@
+# RL-SEARCH-01 (manual): RateLimiting:Search = 3 requests / 8 s per authenticated user (partition = user id)
+alice request 1: HTTP/1.1 200 OK 
+alice request 2: HTTP/1.1 200 OK 
+alice request 3: HTTP/1.1 200 OK 
+alice request 4: HTTP/1.1 429 Too Many Requests Retry-After: 8
+bob request 1 (other partition): 200
+alice GET /api/incidents (route without policy): 200
+anonymous search (no cookie) x4:
+ 401 401 401 401
+alice after window (9 s): 200
+429 body shape:
+{'title': 'Too many requests', 'status': 429, 'detail': 'Забагато запитів. Повторіть пізніше.'}

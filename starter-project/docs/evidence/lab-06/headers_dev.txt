@@ -1,0 +1,28 @@
+# Response headers by class (Development, http launch profile without launchSettings override, client: curl + alice session)
+== 1 static page: GET /
+HTTP/1.1 200 OK
+Content-Type: text/html
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img...
+== 2 successful API: GET /api/incidents/20000000-0000-0000-0000-000000000001 (own)
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img...
+== 3 validation 4xx: GET /api/incidents?status=Unknown
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img...
+== 4 404: GET /api/incidents/99999999-9999-9999-9999-999999999999
+HTTP/1.1 404 Not Found
+Content-Type: application/problem+json
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img...

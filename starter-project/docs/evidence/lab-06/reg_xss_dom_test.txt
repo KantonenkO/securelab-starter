@@ -1,0 +1,5 @@
+﻿# REG-XSS-01 DOM test tests/browser/lab05-dom.js on the LR6 fixed state, browser: Edg/157.0.0.0
+RESULT: PASS
+PASS Description(marker): один текстовий вузол, елементів 0, marker не виконано
+PASS Позитивні рядки (5): DOM.textContent == збережене значення, елементів 0
+PASS Comments: 2 елементів p, кожен text == comments[].text, елементів у p 0; повторний render ×3 без дублювання; marker не виконано

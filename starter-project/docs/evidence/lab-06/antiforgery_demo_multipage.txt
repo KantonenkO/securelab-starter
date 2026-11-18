@@ -1,0 +1,10 @@
+﻿auth.html login ann -> Login: 204
+browser.html PUT after login -> PUT: 204
+browser.html after reload (F5) PUT -> PUT: 204
+
+Network (CDP) summary, token values are not captured:
+POST     http://localhost:5190/demo/login?user=ann  status=204  Origin=http://localhost:5190  [Cookie надіслано]
+GET      http://localhost:5190/demo/csrf-token  status=200  [Cookie надіслано]
+PUT      http://localhost:5190/demo/note  status=204  Origin=http://localhost:5190  [Cookie надіслано]
+GET      http://localhost:5190/demo/csrf-token  status=200  [Cookie надіслано]
+PUT      http://localhost:5190/demo/note  status=204  Origin=http://localhost:5190  [Cookie надіслано]

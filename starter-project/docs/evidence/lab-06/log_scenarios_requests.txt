@@ -1,0 +1,13 @@
+# Six log scenarios (stage 3, item 4). Development, local seed; request bodies with credentials are never printed
+[1] successful login
+login alice: status=204
+[2] failed login (synthetic wrong password)
+status=401
+[4] validation error: GET /api/incidents?status=Unknown
+status=400
+[3] denied protected action: alice (Reporter) POST triage of own incident (with valid token pair)
+status=403
+[6] privileged transition: alice creates a New incident, morgan (Analyst) triages it
+create status=201
+login morgan: status=204
+triage status=200

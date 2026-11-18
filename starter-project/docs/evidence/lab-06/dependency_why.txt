@@ -1,0 +1,22 @@
+$ dotnet nuget why src/SecureLab.Api Microsoft.OpenApi
+Project 'SecureLab.Api' has the following dependency graph(s) for 
+'Microsoft.OpenApi':
+
+  [net10.0]                                                                     
+  ├── Microsoft.AspNetCore.OpenApi (v10.0.10)                                   
+  │   └── [38;5;14mMicrosoft.OpenApi (v2.7.5)[0m                                            
+  └── [38;5;14mMicrosoft.OpenApi (v2.7.5)[0m                                                
+
+$ git log --oneline -3 -S'GHSA-v5pm-xwqc-g5wc' -- src/SecureLab.Api/SecureLab.Api.csproj
+3275a6b Initial commit
+$ git status --short   (lockfiles unchanged after restore)
+?? docs/evidence/lab-06/csrf_manual_trace.txt
+?? docs/evidence/lab-06/dependency_audit.txt
+?? docs/evidence/lab-06/dependency_audit_json.txt
+?? docs/evidence/lab-06/dependency_why.txt
+?? docs/evidence/lab-06/git_grep_secrets.txt
+?? docs/evidence/lab-06/headers_dev.txt
+?? docs/evidence/lab-06/log_scenarios_requests.txt
+?? docs/evidence/lab-06/log_sensitive_check.txt
+?? docs/evidence/lab-06/production_normal.txt
+?? docs/evidence/lab-06/production_reset_refused.txt

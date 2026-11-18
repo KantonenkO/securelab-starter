@@ -1,0 +1,9 @@
+# Mutating operations in OpenAPI (Development, /openapi/v1.json) - compared with git grep .Map(Post|Put|Patch|Delete)
+DELETE /api/incidents/{id}
+POST /api/auth/login
+POST /api/auth/logout
+POST /api/auth/register
+POST /api/incidents
+POST /api/incidents/{id}/triage
+PUT /api/incidents/{id}
+count = 7 (register, login, logout, incidents POST, PUT, DELETE, triage = 7 server routes)

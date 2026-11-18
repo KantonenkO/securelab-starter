@@ -1,0 +1,46 @@
+# Production-like profile (dotnet run --no-launch-profile, ASPNETCORE_ENVIRONMENT=Production, connection string from environment)
+      Now listening on: http://localhost:5080
+      Hosting environment: Production
+> GET /openapi/v1.json
+HTTP/1.1 404 Not Found
+Content-Type: application/problem+json
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-9a79f611a44b42118976d18f4a8e7f45-a60e26fbda202618-00"}
+> GET /scalar/v1 (no Scalar in Production: SPA fallback expected)
+HTTP/1.1 200 OK
+Content-Type: text/html
+<!doctype html>
+> GET /health
+{"status":"ready"} status=200
+> Production profile cookie: Secure policy (http transport cannot carry it)
+login status=204
+cookie attributes: 1 HttpOnly entry; Secure flag column: TRUE
+GET /api/me with the Secure cookie over plain HTTP (curl treats localhost as a secure context): status=200
+> Production: validation and 404 behind the real session (not 401)
+GET /api/incidents?status=Unknown -> status=400 content-type=application/problem+json
+  title= One or more validation errors occurred. | errors keys= ['status']
+GET /api/incidents/99999999-9999-9999-9999-999999999999 -> status=404 content-type=application/problem+json
+  title= Інцидент не знайдено | status= 404
+> Production: headers by class (static / success API / 400 / 404)
+-- GET /
+HTTP/1.1 200 OK
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src '...
+-- GET own incident
+HTTP/1.1 200 OK
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src '...
+-- GET ?status=Unknown
+HTTP/1.1 400 Bad Request
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src '...
+-- GET 9999...
+HTTP/1.1 404 Not Found
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src '...

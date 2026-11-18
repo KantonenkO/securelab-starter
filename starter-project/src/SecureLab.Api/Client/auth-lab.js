@@ -45,8 +45,11 @@ function asJson(form, mapper = value => value) {
   return JSON.stringify(mapper(Object.fromEntries(new FormData(form))));
 }
 
+// ЛР 6: усі POST йдуть через єдиний helper antiforgery (csrf.js); він додає header X-CSRF-TOKEN і тримає токен лише в пам'яті.
 async function postJson(path, body) {
-  return apiFetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body });
+  const url = new URL(path, location.origin);
+  if (url.origin !== location.origin) throw new Error("Потрібна адреса цього застосунку.");
+  return SecureLabCsrf.fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body });
 }
 
 document.querySelector("#register").addEventListener("submit", async event => {
@@ -77,6 +80,7 @@ document.querySelector("#login").addEventListener("submit", async event => {
   const form = event.currentTarget;
   const response = await postJson("/api/auth/login", asJson(form));
   form.elements.password.value = "";
+  SecureLabCsrf.clear(); // principal змінився: токен для нього запитується заново
   show(`Login: ${response.status}`);
   await refreshSessionState();
   if (response.status === 204) await loadProfile();
@@ -107,6 +111,7 @@ document.querySelector("#incident").addEventListener("submit", async event => {
 
 document.querySelector("#logout").addEventListener("click", async () => {
   const response = await postJson("/api/auth/logout", "{}");
+  SecureLabCsrf.clear();
   clearProfile();
   document.querySelector("#incident").reset();
   await refreshSessionState();

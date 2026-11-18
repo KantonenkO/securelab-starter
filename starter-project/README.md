@@ -136,3 +136,26 @@ docs/                    карта архітектури, варіант, ма
 
 Перед commit перегляньте `git status`, `git diff --staged` і переконайтеся, що
 до Git не потрапили `.env`, cookies, tokens, реальні passwords, dumps або logs.
+
+## ЛР 6. Посилення захищеності та підсумковий огляд
+
+Гілка `lab/6-hardening-review`, підсумковий тег `v1.0.0` (на перевіреному merge commit). Документи: `docs/threat-model.md`
+(межі огляду), `docs/security-review.md` (підсумковий review), `docs/findings/F-0*.md` (finding cards), докази — `docs/evidence/lab-06/`.
+
+Що додано: стандартний antiforgery на всіх cookie-authenticated змінювальних маршрутах (`Security/AntiforgeryProtection.cs`,
+`Client/csrf.js`, маршрут `GET /api/antiforgery/token`, header `X-CSRF-TOKEN`), заголовки безпеки й `Cache-Control: no-store` на error-шляху та
+API, rate limiting для `search` (за користувачем) і `register` (за IP; квоти в конфігурації `RateLimiting`), audit event дозволеного переходу статусу.
+
+Передумови: Docker Desktop, .NET SDK 10.0.x за `global.json`, змінна `SeedUsers__Password` (значення не в Git). Команди:
+
+```bash
+dotnet restore SecureLab.sln --locked-mode
+dotnet build SecureLab.sln -c Release --no-restore
+docker compose --env-file infra/.env.example -f infra/compose.yaml up -d --wait
+dotnet run --project src/SecureLab.Api -- --reset-database
+dotnet test SecureLab.sln -c Release
+```
+
+Production-like запуск (без launch profile; connection string лише зі змінної середовища): `ASPNETCORE_ENVIRONMENT=Production`,
+`ASPNETCORE_URLS=http://localhost:5080`, `ConnectionStrings__SecureLab=...`, `dotnet run --project src/SecureLab.Api --no-launch-profile -c Release`.
+

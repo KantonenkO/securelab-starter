@@ -86,6 +86,7 @@ public sealed class LoginHardeningTests(SecureLabApiFactory factory) : IClassFix
 
         using var failed = await client.PostAsJsonAsync("/api/auth/login", new { userName = "alice", password = TestPassword.Other });
         using var ok = await client.PostAsJsonAsync("/api/auth/login", new { userName = "alice", password = TestPassword.Seed });
+        await client.UseAntiforgeryTokenAsync(); // ЛР 6: logout входить до cookie-периметра і вимагає request token
         using var logout = await client.PostAsync("/api/auth/logout", null);
         for (var i = 0; i < 4; i++)
             using (await client.PostAsJsonAsync("/api/auth/login", new { userName = "bob", password = TestPassword.Other })) { }

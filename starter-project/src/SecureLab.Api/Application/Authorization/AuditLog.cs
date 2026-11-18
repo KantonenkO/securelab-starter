@@ -19,4 +19,17 @@ public static class AuditLog
             http.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "anonymous", action, $"incident:{resourceId}", "denied",
             DateTimeOffset.UtcNow.ToString("O"), traceId);
     }
+
+    /// <summary>
+    /// F-05: дозволений привілейований перехід статусу. Ті самі поля, що й у відмові (subject, action, resource, result,
+    /// time, traceId) + пара статусів. Free-text причина, cookie, токени й тіло запиту в подію не потрапляють.
+    /// </summary>
+    public static void StatusChanged(ILoggerFactory loggers, HttpContext http, string action, Guid resourceId, string from, string to)
+    {
+        var traceId = Activity.Current?.Id ?? http.TraceIdentifier;
+        loggers.CreateLogger("SecureLab.Audit").LogInformation(
+            "incident.status.changed subject={SubjectId} action={Action} resource={Resource} result={Result} from={From} to={To} occurredAtUtc={OccurredAtUtc} traceId={TraceId}",
+            http.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "anonymous", action, $"incident:{resourceId}", "allowed",
+            from, to, DateTimeOffset.UtcNow.ToString("O"), traceId);
+    }
 }

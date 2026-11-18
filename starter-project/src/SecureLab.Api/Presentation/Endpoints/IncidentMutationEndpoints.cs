@@ -4,6 +4,7 @@ using SecureLab.Api.Application.Authorization;
 using SecureLab.Api.Data;
 using SecureLab.Api.Data.Entities;
 using SecureLab.Api.Presentation.Contracts;
+using SecureLab.Api.Security;
 
 namespace SecureLab.Api.Presentation.Endpoints;
 
@@ -15,9 +16,9 @@ public static class IncidentMutationEndpoints
 
     public static IEndpointRouteBuilder MapIncidentMutationEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPut("/api/incidents/{id:guid}", UpdateAsync).RequireAuthorization();
-        endpoints.MapDelete("/api/incidents/{id:guid}", DeleteAsync).RequireAuthorization();
-        endpoints.MapPost("/api/incidents/{id:guid}/triage", TriageAsync).RequireAuthorization();
+        endpoints.MapPut("/api/incidents/{id:guid}", UpdateAsync).RequireAuthorization().RequireAntiforgery();
+        endpoints.MapDelete("/api/incidents/{id:guid}", DeleteAsync).RequireAuthorization().RequireAntiforgery();
+        endpoints.MapPost("/api/incidents/{id:guid}/triage", TriageAsync).RequireAuthorization().RequireAntiforgery();
         endpoints.MapGet("/api/incident-comments/{id:guid}", GetCommentAsync).RequireAuthorization();
         return endpoints;
     }
@@ -95,6 +96,8 @@ public static class IncidentMutationEndpoints
         incident.Status = IncidentStatus.Triaged; // next status визначає сервер
         incident.UpdatedAtUtc = now;
         await db.SaveChangesAsync(ct);
+        // F-05: audit event лише ПІСЛЯ успішного збереження (подія не з'являється для перехода, якого не було).
+        AuditLog.StatusChanged(loggers, http, "incident.triage", incident.Id, IncidentStatus.New.ToString(), IncidentStatus.Triaged.ToString());
         return Results.Ok(Changed(incident));
     }
 
