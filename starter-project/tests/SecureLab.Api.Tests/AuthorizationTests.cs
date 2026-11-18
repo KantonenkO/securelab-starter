@@ -289,6 +289,7 @@ public sealed class AuthorizationTests(SecureLabApiFactory factory) : IClassFixt
         using var alice = host.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = true });
         using (var login = await alice.PostAsJsonAsync("/api/auth/login", new { userName = "alice", password = Password }))
             Assert.Equal(HttpStatusCode.NoContent, login.StatusCode);
+        await alice.UseAntiforgeryTokenAsync(); // ЛР 6: triage вимагає request token; відмова за роллю відбувається ПІСЛЯ antiforgery
         using var response = await alice.PostAsJsonAsync($"/api/incidents/{DbSeeder.AliceIncidentId}/triage", new { reason = "спроба" });
         var body = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
 

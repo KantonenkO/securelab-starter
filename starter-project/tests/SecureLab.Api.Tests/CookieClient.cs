@@ -5,10 +5,10 @@ namespace SecureLab.Api.Tests;
 
 public static class CookieClient
 {
-    /// <param name="withAntiforgery">true - після login клієнт одержує request token і додає header до своїх запитів
+    /// <param name="withAntiforgery">true (за замовчуванням) - після login клієнт одержує request token і додає header до своїх запитів
     /// (шлях легітимного UI). false - «браузер із автоматичною cookie, але без токена» (негативна частина REG-CSRF-01).</param>
     public static async Task<HttpClient> LoginAsync(this SecureLabApiFactory factory, string userName, string password,
-        bool withAntiforgery = false)
+        bool withAntiforgery = true)
     {
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {

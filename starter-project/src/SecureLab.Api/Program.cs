@@ -5,6 +5,7 @@ using Scalar.AspNetCore;
 using SecureLab.Api.Application.Incidents;
 using SecureLab.Api.Data;
 using SecureLab.Api.Presentation.Endpoints;
+using SecureLab.Api.Security;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<SecureLabDbContext>(options =>
 builder.Services.AddScoped<IncidentQueries>();
 
 builder.AddLab03Identity();
+// ЛР 6 (F-01): стандартний antiforgery (cookie + request token у header) для cookie-authenticated mutations.
+builder.AddAntiforgeryProtection();
 // ЛР 04: resource-based handler-и (рішення для Incident і для child IncidentComment).
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SecureLab.Api.Application.Authorization.IncidentAuthorizationHandler>();
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SecureLab.Api.Application.Authorization.IncidentCommentAuthorizationHandler>();
@@ -109,6 +112,7 @@ app.MapGet("/health", async (SecureLabDbContext dbContext, CancellationToken can
 app.MapIncidentEndpoints();
 app.MapIncidentMutationEndpoints();
 app.MapLab03Identity();
+app.MapAntiforgeryEndpoints();
 app.MapLab02Endpoints();
 app.MapFallbackToFile("index.html");
 

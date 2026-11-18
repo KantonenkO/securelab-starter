@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using SecureLab.Api.Data;
 using SecureLab.Api.Data.Entities;
+using SecureLab.Api.Security;
 
 namespace SecureLab.Api.Scaffolding;
 
@@ -86,7 +87,7 @@ public static class Lab03Identity
             if (!role.Succeeded) throw new InvalidOperationException("Default role assignment failed.");
             log.LogInformation("auth.register.succeeded userId={UserId}", user.Id);
             return Results.Created("/api/me", new RegisterResponse(user.Id, user.UserName!, user.DisplayName));
-        });
+        }).ExemptFromAntiforgery("Публічне створення акаунта: authentication cookie не використовується; захист - rate limit, однакові відповіді, JSON-only (CORS без дозволеного origin).");
 
         app.MapPost("/api/auth/login", async (LoginRequest input, HttpContext http,
             SignInManager<ApplicationUser> signIn, LoginThrottle throttle, ILoggerFactory loggers) =>
@@ -124,7 +125,7 @@ public static class Lab03Identity
             }
             log.LogInformation("auth.login.succeeded userId={UserId}", known.Id);
             return Results.NoContent();
-        });
+        }).ExemptFromAntiforgery("Pre-auth endpoint: чинної authentication cookie немає; захист - login limiter (IP+ім'я, IP), JSON-only, SameSite=Lax. Login-CSRF прийнято як residual risk R-01.");
 
         app.MapPost("/api/auth/logout", async (HttpContext http, SignInManager<ApplicationUser> signIn,
             ILoggerFactory loggers) =>
@@ -133,7 +134,7 @@ public static class Lab03Identity
             await signIn.SignOutAsync();
             loggers.CreateLogger("SecureLab.Auth").LogInformation("auth.logout userId={UserId}", userId ?? "anonymous");
             return Results.NoContent();
-        });
+        }).RequireAntiforgery(); // header перевіряється ДО SignOutAsync (фільтр виконується до handler)
 
         // ЛР 03: verified principal замість заявленого X-Demo-UserId. Header ігнорується повністю.
         app.MapGet("/api/me", async (HttpContext http, UserManager<ApplicationUser> users) =>
