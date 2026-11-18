@@ -26,6 +26,8 @@ builder.Services.AddScoped<IncidentQueries>();
 builder.AddLab03Identity();
 // ЛР 6 (F-01): стандартний antiforgery (cookie + request token у header) для cookie-authenticated mutations.
 builder.AddAntiforgeryProtection();
+// ЛР 6: rate limiting як захист від зловживання для search (за principal) і register (за IP); login limiter - з ЛР 3.
+builder.AddAbuseLimits();
 // ЛР 04: resource-based handler-и (рішення для Incident і для child IncidentComment).
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SecureLab.Api.Application.Authorization.IncidentAuthorizationHandler>();
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SecureLab.Api.Application.Authorization.IncidentCommentAuthorizationHandler>();
@@ -58,9 +60,9 @@ if (resetRequested)
     return;
 }
 
-app.UseExceptionHandler();
-app.UseStatusCodePages();
-
+// ЛР 6 (F-02, F-03): заголовки безпеки ставляться в Response.OnStarting і стоять ПЕРЕД exception handler.
+// Раніше вони виставлялися до next(), а UseExceptionHandler очищає заголовки при необробленому винятку,
+// тому на 500 CSP/nosniff/Referrer-Policy зникали (error-path gap). OnStarting спрацьовує вже після очищення.
 // ЛР 5: CSP складено за фактичними ресурсами клієнта (власні scripts/styles/images з того самого origin, API на
 // тому самому origin). Без unsafe-inline і зовнішніх джерел; frame-ancestors не має fallback до default-src.
 const string csp = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; "
@@ -68,17 +70,30 @@ const string csp = "default-src 'self'; script-src 'self'; style-src 'self'; img
 
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.XContentTypeOptions = "nosniff";
-    context.Response.Headers.Append("Referrer-Policy", "no-referrer");
-    // /scalar - Development-довідник на сторонньому UI package з власними inline/зовнішніми ресурсами: окремий виняток,
-    // лише в Development; CSP основного клієнта через нього не послаблюється.
-    var isDevelopmentApiReference = app.Environment.IsDevelopment() && context.Request.Path.StartsWithSegments("/scalar");
-    if (!isDevelopmentApiReference)
+    context.Response.OnStarting(() =>
     {
-        context.Response.Headers["Content-Security-Policy"] = csp;
-    }
+        var headers = context.Response.Headers;
+        headers.XContentTypeOptions = "nosniff";
+        headers["Referrer-Policy"] = "no-referrer";
+        // /scalar - Development-довідник на сторонньому UI package з власними inline/зовнішніми ресурсами: окремий виняток,
+        // лише в Development; CSP основного клієнта через нього не послаблюється.
+        var isDevelopmentApiReference = app.Environment.IsDevelopment() && context.Request.Path.StartsWithSegments("/scalar");
+        if (!isDevelopmentApiReference)
+        {
+            headers["Content-Security-Policy"] = csp;
+        }
+        // F-03: відповіді API (персональні дані, власні/чужі ресурси, 4xx/5xx) не кешуються браузером і спільними кешами.
+        if (context.Request.Path.StartsWithSegments("/api") && !headers.ContainsKey("Cache-Control"))
+        {
+            headers.CacheControl = "no-store";
+        }
+        return Task.CompletedTask;
+    });
     await next(context);
 });
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())
 {
@@ -95,6 +110,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseAuthentication();
 app.UseAuthorization();
+// Після authorization: анонімний запит до protected route дає 401 і не споживає квоту; 429 - лише для автентифікованих/публічних маршрутів.
+app.UseRateLimiter();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

@@ -59,7 +59,7 @@ public static class Lab02Endpoints
                     item.Severity.ToString(), item.Status.ToString(), item.CreatedAtUtc))
                 .ToListAsync(ct);
             return Results.Ok(rows);
-        }).RequireAuthorization();
+        }).RequireAuthorization().RequireRateLimiting(AbuseLimits.SearchPolicy);
         app.MapPost("/api/incidents", async (CreateIncidentRequest request, HttpContext httpContext, SecureLabDbContext db, CancellationToken ct) =>
         {
             // ЛР 03: власника встановлює сервер із перевіреного principal (cookie), а не з тіла чи header.

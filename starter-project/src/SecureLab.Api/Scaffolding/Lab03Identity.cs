@@ -87,7 +87,7 @@ public static class Lab03Identity
             if (!role.Succeeded) throw new InvalidOperationException("Default role assignment failed.");
             log.LogInformation("auth.register.succeeded userId={UserId}", user.Id);
             return Results.Created("/api/me", new RegisterResponse(user.Id, user.UserName!, user.DisplayName));
-        }).ExemptFromAntiforgery("Публічне створення акаунта: authentication cookie не використовується; захист - rate limit, однакові відповіді, JSON-only (CORS без дозволеного origin).");
+        }).ExemptFromAntiforgery("Публічне створення акаунта: authentication cookie не використовується; захист - rate limit, однакові відповіді, JSON-only (CORS без дозволеного origin).").RequireRateLimiting(AbuseLimits.RegisterPolicy);
 
         app.MapPost("/api/auth/login", async (LoginRequest input, HttpContext http,
             SignInManager<ApplicationUser> signIn, LoginThrottle throttle, ILoggerFactory loggers) =>
