@@ -1,0 +1,19 @@
+# Final regression: tip of lab/6-hardening-review before merge
+date: 2026-11-18T10:58:32+02:00
+commit: 3364f523d2f11bdf0705fe11828f37e460c20b4d   branch: lab/6-hardening-review   describe: lr06-vulnerable-4-g3364f52
+sdk: 10.0.302
+$ git status --short
+(end of status)
+$ dotnet restore SecureLab.sln --locked-mode
+  Restored <work>/src\SecureLab.Api\SecureLab.Api.csproj (in 1,2 sec).
+  Restored <work>/tests\SecureLab.Api.Tests\SecureLab.Api.Tests.csproj (in 1,2 sec).
+exit code: 0
+$ dotnet build SecureLab.sln -c Release --no-restore
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+Time Elapsed 00:00:15.26
+$ dotnet run --project src/SecureLab.Api -c Release --no-build -- --reset-database
+Локальні навчальні дані очищено та повторно заповнено seed-значеннями.
+$ dotnet test SecureLab.sln -c Release --no-build
+Passed!  - Failed:     0, Passed:   127, Skipped:     0, Total:   127, Duration: 45 s - SecureLab.Api.Tests.dll (net10.0)
