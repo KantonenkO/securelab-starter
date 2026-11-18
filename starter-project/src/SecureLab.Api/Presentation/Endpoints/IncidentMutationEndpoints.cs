@@ -96,6 +96,8 @@ public static class IncidentMutationEndpoints
         incident.Status = IncidentStatus.Triaged; // next status визначає сервер
         incident.UpdatedAtUtc = now;
         await db.SaveChangesAsync(ct);
+        // F-05: audit event лише ПІСЛЯ успішного збереження (подія не з'являється для перехода, якого не було).
+        AuditLog.StatusChanged(loggers, http, "incident.triage", incident.Id, IncidentStatus.New.ToString(), IncidentStatus.Triaged.ToString());
         return Results.Ok(Changed(incident));
     }
 
