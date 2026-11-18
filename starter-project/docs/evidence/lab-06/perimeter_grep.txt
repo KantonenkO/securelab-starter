@@ -1,0 +1,17 @@
+$ git grep -n -E "\.Map(Post|Put|Patch|Delete)\(" -- src
+src/SecureLab.Api/Presentation/Endpoints/IncidentMutationEndpoints.cs:19:        endpoints.MapPut("/api/incidents/{id:guid}", UpdateAsync).RequireAuth
+src/SecureLab.Api/Presentation/Endpoints/IncidentMutationEndpoints.cs:20:        endpoints.MapDelete("/api/incidents/{id:guid}", DeleteAsync).RequireA
+src/SecureLab.Api/Presentation/Endpoints/IncidentMutationEndpoints.cs:21:        endpoints.MapPost("/api/incidents/{id:guid}/triage", TriageAsync).Req
+src/SecureLab.Api/Scaffolding/Lab02Endpoints.cs:63:        app.MapPost("/api/incidents", async (CreateIncidentRequest request, HttpContext httpContext
+src/SecureLab.Api/Scaffolding/Lab03Identity.cs:56:        app.MapPost("/api/auth/register", async (RegisterRequest input, UserManager<ApplicationUser>
+src/SecureLab.Api/Scaffolding/Lab03Identity.cs:92:        app.MapPost("/api/auth/login", async (LoginRequest input, HttpContext http,
+src/SecureLab.Api/Scaffolding/Lab03Identity.cs:130:        app.MapPost("/api/auth/logout", async (HttpContext http, SignInManager<ApplicationUser> sig
+
+$ git grep -n -E "method: *.(POST|PUT|PATCH|DELETE)" -- src/SecureLab.Api/Client
+src/SecureLab.Api/Client/auth-lab.js:52:  return SecureLabCsrf.fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body });
+src/SecureLab.Api/Client/browser-lab.js:31:  const response = await SecureLabCsrf.fetch("/api/incidents", { method: "POST", headers: { "Content-Type": "application/json" 
+
+$ git grep -n -E "SecureLabCsrf.fetch|MapGet\(TokenRoute" -- src
+src/SecureLab.Api/Client/auth-lab.js:52:  return SecureLabCsrf.fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body });
+src/SecureLab.Api/Client/browser-lab.js:31:  const response = await SecureLabCsrf.fetch("/api/incidents", { method: "POST", headers: { "Content-Type":
+src/SecureLab.Api/Security/AntiforgeryProtection.cs:40:        app.MapGet(TokenRoute, (HttpContext http, IAntiforgery antiforgery) =>

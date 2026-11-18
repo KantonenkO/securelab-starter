@@ -1,0 +1,21 @@
+$ dotnet --version
+10.0.302
+exit code: 0
+$ dotnet --list-sdks
+10.0.302 [C:\Program Files\dotnet\sdk]
+$ dotnet restore SecureLab.sln --locked-mode
+  Determining projects to restore...
+  Restored <work>/tests\SecureLab.Api.Tests\SecureLab.Api.Tests.csproj (in 444 ms).
+  Restored <work>/src\SecureLab.Api\SecureLab.Api.csproj (in 461 ms).
+exit code: 0
+$ dotnet list SecureLab.sln package --vulnerable --include-transitive
+  Determining projects to restore...
+  Restored <work>/src\SecureLab.Api\SecureLab.Api.csproj (in 680 ms).
+  Restored <work>/tests\SecureLab.Api.Tests\SecureLab.Api.Tests.csproj (in 680 ms).
+
+The following sources were used:
+   https://api.nuget.org/v3/index.json
+
+The given project `SecureLab.Api` has no vulnerable packages given the current sources.
+The given project `SecureLab.Api.Tests` has no vulnerable packages given the current sources.
+exit code: 0

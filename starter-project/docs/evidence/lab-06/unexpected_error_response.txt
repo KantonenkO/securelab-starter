@@ -1,0 +1,8 @@
+# [5] unexpected server error: Production, unreachable DB port 54399, public login with an invented password
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/problem+json
+Cache-Control: no-cache,no-store
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img...
+body: {"type":"https://tools.ietf.org/html/rfc9110#section-15.6.1","title":"An error occurred while processing your request.","status":500,"traceId":"00-2706193d193542332b3a6989e21419ce-29d0a2c8d0899549-00"}

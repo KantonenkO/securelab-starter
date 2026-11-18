@@ -1,0 +1,43 @@
+﻿login -> Профіль: 200
+create #1 -> Створення: 201. Інцидент «LR6 browser demo 105148», статус New.
+create #2 after F5 -> Створення: 201. Інцидент «LR6 browser demo 105148 b», статус New.
+POST without X-CSRF-TOKEN (same session) -> 
+logout -> Logout: 204; повторний /api/me: 401
+browser-lab create -> GET: 200
+
+Network (CDP): methods, URLs and statuses only; X-CSRF-TOKEN value is not captured
+GET      http://localhost:5080/api/antiforgery/token  status=200
+POST     http://localhost:5080/api/auth/login  status=204  Origin=http://localhost:5080  [Cookie надіслано]
+GET      http://localhost:5080/api/auth/session-check  status=204  [Cookie надіслано]
+GET      http://localhost:5080/api/me  status=200  [Cookie надіслано]
+GET      http://localhost:5080/api/antiforgery/token  status=200  [Cookie надіслано]
+POST     http://localhost:5080/api/incidents  status=201  Origin=http://localhost:5080  [Cookie надіслано]
+GET      http://localhost:5080/api/auth/session-check  status=204
+GET      http://localhost:5080/api/antiforgery/token  status=200  [Cookie надіслано]
+POST     http://localhost:5080/api/incidents  status=201  Origin=http://localhost:5080  [Cookie надіслано]
+POST     http://localhost:5080/api/incidents  status=400  Origin=http://localhost:5080  [Cookie надіслано]
+POST     http://localhost:5080/api/auth/logout  status=204  Origin=http://localhost:5080  [Cookie надіслано]
+GET      http://localhost:5080/api/auth/session-check  status=401  [Cookie надіслано]
+GET      http://localhost:5080/api/me  status=401  [Cookie надіслано]
+GET      http://localhost:5080/api/auth/session-check  status=401  [Cookie надіслано]
+GET      http://localhost:5080/api/antiforgery/token  status=200  [Cookie надіслано]
+POST     http://localhost:5080/api/auth/login  status=204  Origin=http://localhost:5080  [Cookie надіслано]
+GET      http://localhost:5080/api/auth/session-check  status=204  [Cookie надіслано]
+GET      http://localhost:5080/api/me  status=200  [Cookie надіслано]
+GET      http://localhost:5080/api/antiforgery/token  status=200  [Cookie надіслано]
+POST     http://localhost:5080/api/incidents  status=201  Origin=http://localhost:5080  [Cookie надіслано]
+GET      http://localhost:5080/api/incidents/326275bc-95e8-4422-97d3-2cfc34bb5e4d  status=200  [Cookie надіслано]
+
+Console / Log entries (4):
+[error] Failed to load resource: the server responded with a status of 400 (Bad Request)
+[error] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[error] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[error] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+CSP violations in Console: 0
+
+Requests carrying X-CSRF-TOKEN: 6
+request with X-CSRF-TOKEN present, length=155
+request with X-CSRF-TOKEN present, length=198
+request with X-CSRF-TOKEN present, length=198
+request with X-CSRF-TOKEN present, length=198
+request with X-CSRF-TOKEN present, length=155

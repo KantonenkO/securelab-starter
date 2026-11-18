@@ -1,0 +1,15 @@
+# Sensitive-data search in the sink lr06-logs/api.log (6 scenarios above); counts are numbers of matching lines
+log lines total: 367
+scenarios present: login.succeeded=2 login.failed=1 validation(400 request)=0 authorization.denied=1 unexpected(ExceptionHandlerMiddleware)=2 incident.status.changed=1
+grep -c -F SeedUsers__Password value : 0
+grep -c -F NotARealPassword1!        : 0
+grep -c -F unreachable-study-value   : 0
+grep -c -i -E 'cookie:|set-cookie'   : 0
+grep -c -F SENSITIVE-FREE-TEXT-REASON: 0
+grep -c -E 'AQAAAA|X-CSRF-TOKEN|CfDJ8'  : 0
+--- audit/auth lines (sanitized view) ---
+auth.login.succeeded userId=10000000-0000-0000-0000-000000000001
+auth.login.failed userName=alice
+authorization.denied subject=10000000-0000-0000-0000-000000000001 action=incident.triage resource=incident:20000000-0000-0000-0000-000000000001 result=denied occurredAtUtc=2026-11-18T08:46:27.8428289+00:00 traceId=00-d387900bc07f7
+auth.login.succeeded userId=10000000-0000-0000-0000-000000000003
+incident.status.changed subject=10000000-0000-0000-0000-000000000003 action=incident.triage resource=incident:e7259436-7cd5-4a1a-b9a6-68e887149e2c result=allowed from=New to=Triaged occurredAtUtc=2026-11-18T08:46:31.1331029+00:00 

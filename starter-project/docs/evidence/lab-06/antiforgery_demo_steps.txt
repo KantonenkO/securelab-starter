@@ -1,0 +1,11 @@
+﻿1 | readNote(); | 401
+2 | loginDemo("ann"); | 204
+3 | readNote(); | old
+4 | putNote("changed", false); | 400
+5 | readNote(); | old
+6 | loadCsrfToken(); | undefined
+7 | putNote("changed", true); | 204
+8 | readNote(); | changed
+9 | csrfToken = "bad"; await putNote("x", true); | 400
+10 | loadCsrfToken(); await loginDemo("bob"); await putNote("bob", true); | 400
+11 | readNote(); | changed

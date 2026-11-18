@@ -1,0 +1,15 @@
+# REG-CORS-01 (direct HTTP, Development, policy Lab05BrowserProbe, WithOrigins source: Program.cs)
+> GET /api/me with Origin: http://localhost:4173 (alice cookie)
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Origin: http://localhost:4173
+> OPTIONS preflight, Origin: http://localhost:4173, Access-Control-Request-Method: DELETE
+HTTP/1.1 204 No Content
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: X-Lab-Cors-Probe
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Origin: http://localhost:4173
+> GET /api/me with Origin: http://localhost:4174 (alice cookie)
+HTTP/1.1 200 OK
+> OPTIONS preflight, Origin: http://localhost:4174, Access-Control-Request-Method: DELETE
+HTTP/1.1 204 No Content

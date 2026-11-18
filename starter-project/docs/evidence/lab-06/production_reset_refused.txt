@@ -1,0 +1,3 @@
+# --reset-database in Production-like profile (must be refused; data untouched)
+Unhandled exception. System.InvalidOperationException: Reset даних дозволено лише в явно налаштованому Development environment.
+exit code of this run is non-zero; data is not changed (checked by the following health/login in Development)

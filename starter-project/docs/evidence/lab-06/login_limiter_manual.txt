@@ -1,0 +1,9 @@
+# Login limiter re-check (ЛР 3 control kept): quota 3 per IP+name / window 8 s (env overrides), wrong password is a synthetic value
+morgan wrong password, attempt 1: 401
+morgan wrong password, attempt 2: 401
+morgan wrong password, attempt 3: 401
+morgan attempt 4 (quota exhausted): 429 Retry-After: 8
+morgan attempt 5 with the CORRECT password (still blocked in the window): 429
+invented user ghost1 x4 (same shape as a known account): 401 401 401 429
+other account alice, correct password (key is per IP+name): 204
+morgan after the window (9 s), correct password: 204
