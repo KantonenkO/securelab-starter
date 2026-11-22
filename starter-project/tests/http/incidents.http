@@ -25,6 +25,18 @@ Accept: application/json
 GET {{host}}/api/incidents?status=Unknown
 Accept: application/json
 
-### Lab 1 extension point: expected 501 before student implementation
+### Severity summary: all incidents, expected 200 [{severity, count}]
 GET {{host}}/api/incidents/severity-summary
+Accept: application/json
+
+### Severity summary: status=Triaged, expected 200 (one incident)
+GET {{host}}/api/incidents/severity-summary?status=Triaged
+Accept: application/json
+
+### Severity summary: status=Resolved, expected 200 (all counts 0)
+GET {{host}}/api/incidents/severity-summary?status=Resolved
+Accept: application/json
+
+### Severity summary: status=Unknown, expected 400 Validation Problem Details
+GET {{host}}/api/incidents/severity-summary?status=Unknown
 Accept: application/json
